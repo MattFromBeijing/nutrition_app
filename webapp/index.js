@@ -1,4 +1,5 @@
-const express = require('express');const mongoose = require('./db');
+import express from "express";
+
 const app = express();
 const port = 3000;
 const path = require('path');

@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
+import mongodb from 'mongodb';
 
-const dbURI = 'mongodb+srv://matthew:powerkids@cluster0.laeskgp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const MongoClient = mongodb.MongoClient;
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Database connected!'))
-  .catch((err) => console.error('Connection error', err));
+const uri = "mongodb+srv://matthew:powerkids@cluster0.laeskgp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const client = new MongoClient(uri, { useNewUrlParser: true });
 
-module.exports = mongoose;
+export default client;
