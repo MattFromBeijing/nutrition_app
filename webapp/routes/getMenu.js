@@ -10,7 +10,6 @@ export const getMenu = async () => {
         await client.close();
 
         return results;
-        
     } catch (error) {
         console.error(error)
     }
