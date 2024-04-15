@@ -1,31 +1,34 @@
-import puppeteer from "puppeteer";
+import { getMenuItems } from "./functions/getMenuItems.js";
+import { getWebPages } from "./functions/getWebPages.js";
+import client from "./db.js"
 
-const getLinks = async () => {
+const scrapeMenus = async () => {
+    const webPages = await getWebPages();
+    let todayMenus = [];
 
-  const browser = await puppeteer.launch({
-    headless: false,
-    defaultViewport: null,
-  });
+    for (let i = 0; i < webPages.length; i++){
+        try {
+            const locationMenu = await getMenuItems(webPages[i].location, webPages[i].link);
 
-  const page = await browser.newPage();
+            //append onto existing list
+            todayMenus.push(locationMenu);
 
-  await page.goto("https://menu.hfs.psu.edu/", {
-    waitUntil: "domcontentloaded",
-  });
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
-  const links = await page.evaluate(() => {
-    const mappedLinks = Array.from(document.querySelectorAll("#menu-container a")).map((elementHandle) => ({
-      name : elementHandle.innerText,
-      link : elementHandle.href,
-    }));
-    return mappedLinks.filter(link => link.name !== "")
-  });
-  
-  await browser.close();
-  return links;
-};
+    try {
+        client.connect();
+        const collection = client.db("test1").collection("test1");
+        await collection.insertMany(todayMenus);
+        await client.close()
+        console.log("Documents Inserted.")
+    } catch (error) {
+        console.log(error)
+    }
 
-(async () => {
-  const links = await getLinks();
-  console.log(links);
-})();
+    console.log(JSON.stringify(todayMenus, null, 2));
+}
+
+await scrapeMenus();
