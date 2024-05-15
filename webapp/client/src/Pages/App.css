@@ -1,0 +1,29 @@
+body {
+    display: grid;
+    min-height: 100vh;
+    justify-content: center;
+    margin: 0;
+}
+
+.mobile-box {
+    display: flex;
+    flex-direction: column;
+    width: 360px;
+    padding: 20px;
+    min-height: 100%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: white;
+    overflow: auto;
+}
+
+.flex-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.spinner {
+    color: #162952;
+}
