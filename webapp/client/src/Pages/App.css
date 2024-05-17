@@ -24,6 +24,7 @@ body {
     flex-grow: 1;
 }
 
-.spinner {
-    color: #162952;
+.flex-top-left {
+    display: flex;
+    justify-content: left;
 }

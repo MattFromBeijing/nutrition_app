@@ -5,11 +5,14 @@ import DiningHall from "./DiningHall/DiningHall.js";
 
 function App() {
   const [locations, setLocations] = useState([]);
+  const [fullMenu, setFullMenu] = useState([]);
 
   useEffect(() => {
     fetch('/data/getMenu')
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
+        setFullMenu(data)
         const locs = data.map((el) => {
           return el.Location
         }).sort()
@@ -23,10 +26,10 @@ function App() {
         locations.length === 0 
         ? 
           <div className="flex-center">
-            <p className="fs-5 title">Loading Locations and Menus</p>
-            <Spinner className="spinner" animation="border" role="status"/>
+            <p className="fs-5 title">Downloading today's menus</p>
+            <Spinner className="spinner" style={{ color: "#162952" }}animation="border" role="status"/>
           </div>
-        : <DiningHall locations={locations}/>
+        : <DiningHall locations={locations} fullMenu={fullMenu}/>
       }
     </div>
   )
