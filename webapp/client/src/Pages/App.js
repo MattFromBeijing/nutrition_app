@@ -29,7 +29,8 @@ function App() {
             <p className="fs-5 title">Downloading today's menus</p>
             <Spinner className="spinner" style={{ color: "#162952" }}animation="border" role="status"/>
           </div>
-        : <DiningHall locations={locations} fullMenu={fullMenu}/>
+        : 
+          <DiningHall locations={locations} fullMenu={fullMenu}/>
       }
     </div>
   )

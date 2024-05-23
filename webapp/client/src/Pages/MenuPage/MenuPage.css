@@ -1,9 +1,25 @@
 p.title {
     text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .card {
     margin: 10px;
     padding: 10px;
     cursor: pointer;
+}
+
+.card .card-title {
+    margin-bottom: 0px;
+}
+
+p.subtitle {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.transition-wrapper {
+    margin: 0px;
+    padding: 0px;
 }

@@ -21,7 +21,9 @@ function MenuPage(props) {
       <Card onClick={() => {openIndex === -1 ? setOpenIndex(index) : setOpenIndex(-1)}} aria-controls="item-info" aria-expanded={openIndex === index}>
         <Card.Title>{item.name}</Card.Title>
         <Collapse in={openIndex === index} appear={true}>
-          <Card.Text id="item-info">nothin here yet</Card.Text>
+          <div className="transition-wrapper" id="item-info">
+            <Card.Text >nothin here yet</Card.Text>
+          </div>
         </Collapse>
       </Card>
     )
@@ -33,6 +35,8 @@ function MenuPage(props) {
         <Button variant="primary-light" onClick={props.return}>Back</Button>
       </div>
       <p className="fs-1 title">{props.menuName}</p>
+      <p className="fs-6 title subtitle">👆Click on an item</p>
+      <p className="fs-6 title subtitle">for its nutritional information</p>
       {
         time.getTime() < morning &&
         props.locationMenu.Breakfast.map((item, index) => 
