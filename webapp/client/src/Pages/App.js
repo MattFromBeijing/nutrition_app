@@ -26,7 +26,7 @@ function App() {
         locations.length === 0 
         ? 
           <div className="flex-center">
-            <p className="fs-5 title">Downloading today's menus</p>
+            <p className="fs-5 title">Retrieving today's menus</p>
             <Spinner className="spinner" style={{ color: "#162952" }}animation="border" role="status"/>
           </div>
         : 

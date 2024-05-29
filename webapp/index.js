@@ -12,11 +12,11 @@ app.listen(port, () => {
 
 app.use("/data", dataRouter)
 
-const __filename = fileURLToPath(import.meta.url);
+/*const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build/index.html'));
-});
+});*/

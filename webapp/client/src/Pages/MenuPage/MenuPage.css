@@ -23,3 +23,7 @@ p.subtitle {
     margin: 0px;
     padding: 0px;
 }
+
+.modal-90w {
+    max-width: 320px;
+}

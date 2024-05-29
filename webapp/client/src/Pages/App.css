@@ -27,4 +27,10 @@ body {
 .flex-top-left {
     display: flex;
     justify-content: left;
+    position: absolute;
+}
+
+.flex-top-right {
+    display: flex;
+    justify-content: right;
 }
