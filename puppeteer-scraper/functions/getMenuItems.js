@@ -22,55 +22,71 @@ export const getMenuItems = async (location, link) => {
   };
 
   //loop through every location
-  for (const menuPage of menuPages) {
+  if (menuPages !== 0){
+    for (const menuPage of menuPages) {
       try {
-
+  
         //go to breakfast/lunch/dinner item list page
         await page.goto(menuPage, {waitUntil: 'domcontentloaded',});
         
         //find links to individual item page
         const itemPages = await page.$$eval('a[onmouseover*="Click for label of this item."]', anchors => anchors.map(el => el.href));
 
+        // start set of names to remove duplicate items
+        let existingItems = new Set();
+  
         //loop through every item
-        for (const itemPage of itemPages){
-          try {
+        if (itemPages.length !== 0) {
+          for (const itemPage of itemPages){
+            try {
+              
+              //go to individual item page
+              await page.goto(itemPage, {waitUntil: "domcontentloaded",});
+    
+              //scrape everything
+              const itemName = await page.$eval('.labelrecipe', el => el.textContent);
+              // const itemSugar
+              // const itemFat
+              // ...
+    
+              //create map containing item info
+              let menuItem = {
+                name : itemName,
+                // sugar: itemSugar
+                // fat: itemFat
+                // ...
+              };
+
+              //push map into menu if it doesn't exist in existingItems
+              if (!existingItems.has(menuItem.name)){
+                if (String(menuPage).includes("Breakfast")){
+                  fullMenu.Breakfast.push(menuItem);
+                } else if (String(menuPage).includes("Lunch")){
+                  fullMenu.Lunch.push(menuItem);
+                } else if (String(menuPage).includes("Dinner")){
+                  fullMenu.Dinner.push(menuItem);
+                } else if (String(menuPage).includes("Late+Night")){
+                  fullMenu.LateNight.push(menuItem);
+                }
+
+                // add name to existingItems to filter out future repeated items
+                existingItems.add(menuItem.name)
+              }
+    
+              
             
-            //go to individual item page
-            await page.goto(itemPage, {waitUntil: "domcontentloaded",});
-
-            //scrape everything
-            const itemName = await page.$eval('.labelrecipe', el => el.textContent);
-
-            //create map containing item info
-            let menuItem = {
-              name : itemName,
-            };
-
-            //add map into menu
-            if (String(menuPage).includes("Breakfast")){
-              fullMenu.Breakfast.push(menuItem);
-            } else if (String(menuPage).includes("Lunch")){
-              fullMenu.Lunch.push(menuItem);
-            } else if (String(menuPage).includes("Dinner")){
-              fullMenu.Dinner.push(menuItem);
-            } else if (String(menuPage).includes("Late+Night")){
-              fullMenu.LateNight.push(menuItem);
+            } catch (error) {
+              console.error(error);
             }
-          
-          } catch (error) {
-
-            console.error(error);
-
           }
         }
 
       } catch (error) {
-
         console.error(error);
-
       }
+    }
   }
-
+  
   await browser.close();
   return fullMenu;
 }
