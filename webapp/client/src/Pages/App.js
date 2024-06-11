@@ -6,34 +6,55 @@ import DiningHall from "./DiningHall/DiningHall.js";
 function App() {
   const [locations, setLocations] = useState([]);
   const [fullMenu, setFullMenu] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch('/data/getMenu')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      })
       .then((data) => {
-        console.log(data)
-        setFullMenu(data)
-        const locs = data.map((el) => {
-          return el.Location
-        }).sort()
-        setLocations(locs)
+        setFullMenu(data);
+        const locs = data.map((el) => el.Location).sort();
+        setLocations(locs);
+        setLoading(false);
+      })
+      .catch((e) => {
+        setError(e.message);
+        setLoading(false);
       });
-  }, [])
+  }, []);
 
-  return(
-    <div className="mobile-box">
-      {
-        locations.length === 0 
-        ? 
+  return (
+    <>
+      {loading ? (
+        <div className="mobile-box">
           <div className="flex-center">
             <p className="fs-5 title">Retrieving today's menus</p>
-            <Spinner className="spinner" style={{ color: "#162952" }}animation="border" role="status"/>
+            <Spinner className="spinner" style={{ color: "#FFFFFF" }} animation="border" role="status" />
           </div>
-        : 
-          <DiningHall locations={locations} fullMenu={fullMenu}/>
-      }
-    </div>
-  )
+        </div>
+      ) : error ? (
+        <div className="mobile-box">
+          <div className="flex-center">
+            <p className="fs-5 title text-danger">Error retrieving menu: {error}</p>
+            <p className="fs-5 title text-danger">Please try reloading</p>
+          </div>
+        </div>
+      ) : (
+        <div className="intro-fade">
+          <div className="mobile-box">
+            <DiningHall locations={locations} fullMenu={fullMenu} />
+          </div>
+        </div>
+
+      )}
+    </>
+  );
 }
 
 export default App;

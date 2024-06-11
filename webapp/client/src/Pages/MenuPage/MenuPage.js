@@ -5,7 +5,13 @@ import { Button, Card, Collapse, Modal } from 'react-bootstrap';
 import { useState } from 'react';
 
 function MenuPage(props) {
-  const [openIndex, setOpenIndex] = useState(-1);
+  window.scroll({
+    top: 0,
+    left: 0,
+    behavior: 'instant'
+  });
+
+  const [openIndices, setOpenIndices] = useState([]);
   const [modalState, setModalState] = useState(false)
 
   const getEasternTime = () => {
@@ -20,12 +26,22 @@ function MenuPage(props) {
   const submitFilter = () => {
     setModalState(false)
   }
+
+  const handleClick = (index) => {
+    setOpenIndices((curr) => {
+      if (curr.includes(index)) {
+        return curr.filter(i => i !== index);
+      } else {
+        return [...curr, index];
+      }
+    });
+  };
   
   const ItemCard = ({ item, index }) => {
     return (
-      <Card onClick={() => {openIndex === -1 ? setOpenIndex(index) : setOpenIndex(-1)}} aria-controls="item-info" aria-expanded={openIndex === index}>
+      <Card onClick={() => {handleClick(index)}} aria-controls="item-info" aria-expanded={openIndices === index}>
         <Card.Title>{item.name}</Card.Title>
-        <Collapse in={openIndex === index} appear={true}>
+        <Collapse in={openIndices.includes(index)}>
           <div className="transition-wrapper" id="item-info">
             <Card.Text>nothin here yet</Card.Text>
           </div>
@@ -50,31 +66,33 @@ function MenuPage(props) {
         </Modal.Footer>
       </Modal>
 
-      <div className="flex-top-left">
-        <Button variant="primary-light" onClick={props.return}>Back</Button>
+      <div className="intro-fade">
+        <div className="flex-top-left">
+          <Button variant="primary-light" onClick={props.return} style={{ fontFamily: "Proxima Nova", color: "white" }}>Back</Button>
+        </div>
+        <div className="flex-top-right">
+          <Button variant="primary-light" onClick={() => {setModalState(true)}} style={{ fontFamily: "Proxima Nova", color: "white" }}>Select a diet</Button>
+        </div>
+        <p className="fs-1 title">{props.menuName}</p>
+        <p className="fs-6 subtitle">Click on an item</p>
+        <p style={{ marginBottom: 15 }} className="fs-6 subtitle">for its nutritional information</p>
+        
+        {
+          time.getTime() < morning &&
+          props.locationMenu.Breakfast.map((item, index) => 
+          <ItemCard key={`breakfast-${index}`} item={item} index={index}/>)
+        }
+        {
+          time.getTime() > morning && time.getTime() < noon &&
+          props.locationMenu.Lunch.map((item, index) => 
+          <ItemCard key={`lunch-${index}`} item={item} index={index}/>)
+        }
+        {
+          time.getTime() > noon && time.getTime() < evening &&
+          props.locationMenu.Dinner.map((item, index) => 
+          <ItemCard key={`dinner-${index}`} item={item} index={index}/>)
+        }
       </div>
-      <div className="flex-top-right">
-        <Button variant="primary-light" onClick={() => {setModalState(true)}}>Select a diet</Button>
-      </div>
-      <p className="fs-1 title">{props.menuName}</p>
-      <p className="fs-6 title subtitle">👆Click on an item</p>
-      <p className="fs-6 title subtitle">for its nutritional information👆</p>
-      
-      {
-        time.getTime() < morning &&
-        props.locationMenu.Breakfast.map((item, index) => 
-        <ItemCard key={index} item={item} index={index}/>)
-      }
-      {
-        time.getTime() > morning && time.getTime() < noon &&
-        props.locationMenu.Lunch.map((item, index) => 
-        <ItemCard key={index} item={item} index={index}/>)
-      }
-      {
-        time.getTime() > noon && time.getTime() < evening &&
-        props.locationMenu.Dinner.map((item, index) => 
-        <ItemCard key={index} item={item} index={index}/>)
-      }
     </>
   );
 }
