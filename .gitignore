@@ -1,5 +1,6 @@
 .DS_Store
 
+local_files
 puppeteer-scraper/node_modules/
 webapp/node_modules/
 webapp/client/node_modules/
