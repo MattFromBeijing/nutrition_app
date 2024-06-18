@@ -1,24 +1,10 @@
-import { getMenuItems } from "./functions/getMenuItems.js";
-import { getWebPages } from "./functions/getWebPages.js";
+//import { getMenuItems } from "./functions/getMenuItems.js";
+//import { getWebPages } from "./functions/getWebPages.js";
+import { getMenu } from './functions/getMenu.js'
 import client from "./db.js"
 
 const scrapeMenus = async () => {
-  const webPages = await getWebPages();
-  let todayMenus = [];
-
-  if (webPages.length === 0) return todayMenus;
-
-  for (let i = 0; i < webPages.length; i++){
-    try {
-      const locationMenu = await getMenuItems(webPages[i].location, webPages[i].link);
-
-      //append onto existing list
-      todayMenus.push(locationMenu);
-
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const todayMenus = await getMenu();
 
   try {
     client.connect();
@@ -34,3 +20,19 @@ const scrapeMenus = async () => {
 }
 
 await scrapeMenus();
+
+/* 
+  if (webPages.length === 0) return todayMenus;
+
+  for (let i = 0; i < webPages.length; i++){
+    try {
+      const locationMenu = await getMenuItems(webPages[i].location, webPages[i].link);
+
+      //append onto existing list
+      todayMenus.push(locationMenu);
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+*/
