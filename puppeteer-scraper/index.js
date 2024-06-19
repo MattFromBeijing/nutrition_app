@@ -5,6 +5,7 @@ import client from "./db.js"
 
 const scrapeMenus = async () => {
   const todayMenus = await getMenu();
+  console.log(JSON.stringify(todayMenus, null, 2));
 
   try {
     client.connect();

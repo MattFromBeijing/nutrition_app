@@ -1,10 +1,10 @@
-const { setTimeout } = require('timers/promises');
-const puppeteer = require('puppeteer');
-const fs = require('fs');
+import { setTimeout } from 'timers/promises';
+import puppeteer from 'puppeteer';
+
 
 // DELETE ALL THE CONSOLE LOGS WHEN DONE TESTING THIS PROGRAM CUZ IT SLOWS IT DOWN
 
-export const getMenu = (async () => {
+export const getMenu = async () => {
     try {
         const browser = await puppeteer.launch({
             headless: true,
@@ -45,10 +45,10 @@ export const getMenu = (async () => {
         for (const location of locations) {
             console.log(`Scraping fullMenu for ${location.name}`);
             
-            await setTimeout(300); //this was the part where it was causing the problem
+            
             // Select the location from the dropdown
             await page.select('#selCampus', location.value);
-
+            await setTimeout(500); //this was the part where it was causing the problem
             // Submit the form to reload the page with the selected location
             await page.evaluate(() => {
                 document.forms['frmMenuFilters'].submit();
@@ -121,4 +121,4 @@ export const getMenu = (async () => {
     } catch (error) {
         console.error("An error occurred:", error);
     }
-})();
+};
