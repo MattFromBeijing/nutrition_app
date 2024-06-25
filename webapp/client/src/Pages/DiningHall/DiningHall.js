@@ -17,22 +17,35 @@ function DiningHall(props) {
     behavior: 'instant'
   });
 
-  useEffect(() => {
+  const locationImages = {
+    "Behrend, Bruno's": "/behrend_bruno's.png",
+    "Harrisburg, Stacks": "/harrisburg_stacks.png",
+    "Harrisburg, The Outpost": "/harrisburg_outpost.png",
+    "Berks, Tully's": "/berks_tully's.png",
+    "Altoona, Port Sky Cafe": "/altoona_port_sky_cafe.png",
+    "Hazleton, HighAcres Cafe": "/hazleton_high_acres.png",
+    "Hazleton, Higher Grounds": "/hazleton_higher_grounds.png",
+    "Pollock Dining Commons": "/UP_pollock_dining_commons.png",
+    "East Food District": "/UP_east_food_district.png"
+  }
+
+  useEffect(() => { //basically gets information from prop passed into the file
     if (menuName !== "") {
       const desiredMenu = props.fullMenu.find(menu => menu.Location === menuName)
       setLocationMenu(desiredMenu)
     }
   }, [menuName, props.fullMenu])
 
-  const LocationCard = ({ location }) => {
+  const LocationCard = ({ location, image }) => {
+    console.log(`Rendering image for ${location}: ${image}`); //make sure the image is loading correctly
     return (
       <Card 
-        style={{ width: "150px", height: "160px", margin: "10px 0px 0px 0px"}}
+        style={{ width: "150px", height: "160px", margin: "10px 10px 0px 0px"}}
         onClick={() => {
         setPageState(1)
         setMenuName(location)
         }}>
-        <Card.Img variant="top" src="/penn_state_logo.png"/>
+        <Card.Img variant="top" src={image || "/penn_state_logo.png"}/> 
         <Card.Body>
           <Card.Title style={{ fontSize: "12px"}}>
             {location}
@@ -79,7 +92,7 @@ function DiningHall(props) {
             <p style={{ height: "1.5em", letterSpacing: "-1px", margin: "0px",}}>–––––––––––&nbsp;&nbsp;&nbsp;Select a location&nbsp;&nbsp;&nbsp;–––––––––––</p>
             <div className="content">
               {props.locations.map((name) => (
-                <LocationCard key={name} location={name} />
+                <LocationCard key={name} location={name} image={locationImages[name]}/>
               ))}
           </div>
           </div>

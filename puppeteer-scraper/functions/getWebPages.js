@@ -5,7 +5,7 @@ export const getWebPages = async () => {
     headless: false,
     defaultViewport: null,
   });
-
+  
   const page = await browser.newPage();
 
   await page.goto("https://menu.hfs.psu.edu/", {
