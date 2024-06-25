@@ -117,7 +117,7 @@ export const getMenu = async () => {
 
                             return nutritionFacts;
                         });
-
+                        //Add meal time condition here if needed, but logic should be in other file
                         fullMenu.push({ location: location.name, link: link.text, time: time, ...pagefullMenu }); // pushes the fullMenu into the fullMenu array
                         console.log(`fullMenu collected from ${link.href}:`, pagefullMenu); // when we want to integrate this into MongoDB, we will
 
