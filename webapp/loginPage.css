@@ -1,0 +1,95 @@
+.wrapper {
+    width: 420px;
+    background-color: white;
+    color: rgb(0, 30, 68);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.wrapper h1 {
+    text-align: center;
+    font-size: 36px;
+}
+
+.wrapper .input-box{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+    padding: 5px;
+}
+.input-box input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(0, 30, 68, .75);
+    border-radius: 40px;
+    font-size: 16px;
+    color: rgb(0, 30, 68);
+    
+    padding: 20px 45px 20px 20px;
+}
+.input-box input::placeholder{
+    color: rgba(0, 30, 68, 0.5);
+}
+
+.input-box .icon{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+
+form .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.remember-forgot label input{
+    margin-right: 4px;
+}
+
+.remember-forgot a {
+    color: rgba(0, 30, 68);
+    text-decoration: none;
+
+}
+.remember-forgot a:hover{
+    text-decoration: underline;
+}
+
+form button{
+    width: 100%;
+    height: 45px;
+    background-color: rgb(0, 30, 68);
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+}
+form .register-link{
+    font-size: 14.5;
+    text-align: center;
+    margin: 20px 0 15px;
+
+}
+
+.register-link p a{
+    color: rgb(0, 30, 68);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+.register-link a:hover {
+    text-decoration: underline;
+}
+
