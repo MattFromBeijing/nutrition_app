@@ -56,9 +56,11 @@ const LoginPage = () => {
                 </div>
             </form>
             <div className='continue'>
-                <Link to = '/loading'>Continue to the the menu</Link> 
+                <Link to = '/loading'>Continue to the the menu
                 <GoTriangleRight className='next-icon'/>
-            </div>
+                </Link> 
+                
+            </div>  
         </div>
     )
 }

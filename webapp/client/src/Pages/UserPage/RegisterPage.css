@@ -64,15 +64,31 @@
 
 .check-icon {
     position: absolute;
+    right: -17px;
+    margin-left: 10px; /* Adjust this value for spacing */
+    font-size: 16px;
+    color: rgb(51, 155, 10);
+    /*
+        position: absolute;
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 16px;
     color: rgb(51, 155, 10);
+    */
 }
 
 .button.disabled {
     color:rgba(0, 30, 68, 0.5);
     cursor: not-allowed;
     background-color: #ccc;
+}
+
+.icon-eye{
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    cursor: pointer;
 }

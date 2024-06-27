@@ -1,0 +1,43 @@
+import React from "react"
+import { use } from "react"
+import { useState } from "react" 
+
+export const LoginPage = () => {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+    const handleSubmit = () =>{
+        e.preventDefault();
+        console.log(email);
+        console.log(password);
+
+
+    }
+
+    return(
+        <form>
+            <label for="email">Email:</label>
+                <input 
+                value = {email}
+                onChange = {(e) => setEmail(e.target.value)}
+                type='email' 
+                placeholder="Enter your email here" 
+                id="emailInput" 
+                name="emailInput"
+                />
+            <label for="password">Password</label>
+                <input 
+                value = {password} 
+                onChange = {(e) => setPassword(e.target.value)}
+                type="password" 
+                placeholder="Enter your password here" 
+                id='passwordInput' 
+                name="passwordInput" 
+                
+                />
+            <button type="button" id="submitButton" >Log In</button>
+        </form>
+
+    )
+
+}

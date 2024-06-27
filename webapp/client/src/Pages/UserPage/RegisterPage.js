@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaExclamation, FaCheck } from "react-icons/fa6";
+import { FaUser} from "react-icons/fa";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import "./RegisterPage.css"
 import LoginPage from "./LoginPage";
 import { Link } from "react-router-dom";
@@ -11,7 +13,7 @@ export const RegisterPage = () => { //tf must be capitalized
     const userRef = useRef(); //used to be able to capture user
     const errRef = useRef(); // used to capture the error and annouce it when caught
 
-
+    const [vis, setVis] = useState(false);
 
     const [user, setUser] = useState(""); //have to update user dynamically
     const [validUser, setValidUser] = useState(false); // whether the username is validated or not
@@ -68,6 +70,10 @@ export const RegisterPage = () => { //tf must be capitalized
         setSuccess(true);
     }
     
+    const visi = () =>{
+        setVis(true);
+        alert('clicked')
+    }
 
   return (
     <>
@@ -85,6 +91,7 @@ export const RegisterPage = () => { //tf must be capitalized
                 <div className="input-box">
                     {/* Basically, you need all te values below to make sure it works properly */}
                     {/* The aria logic runs everytime the page is loeaded, and provides accessibility by giving the instructions in each step */}
+                    <FaUser className='icon' />
                     <input
                     type="text"
                     id="username"
@@ -106,6 +113,7 @@ export const RegisterPage = () => { //tf must be capitalized
                     Only Letters, numbers, underscores, hyphens are allowed.
                 </p>
                 <div  className="input-box">
+                    <IoMdEye className="icon-eye" onClick={visi} />
                     <input
                     type="password"
                     id="password"

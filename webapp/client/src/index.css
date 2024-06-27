@@ -6,14 +6,13 @@
     box-sizing: border-box;
     
 }
-
 body {
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", sans-serif !important;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: rgb(30, 64, 124);
+    background-color: rgb(30, 64, 124) !important;
 }
 
 code {
