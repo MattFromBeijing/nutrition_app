@@ -1,4 +1,32 @@
-import "./App.css";
+import './App.css';
+
+import LoginPage from './UserPage/LoginPage.js';
+import RegisterPage from './UserPage/RegisterPage.js';
+import LoadingPage from './LoadingPage/LoadingPage';
+import DiningHall from "./DiningHall/DiningHall.js";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+
+function App() {
+  return (
+    <Router>
+      <div className='App'>
+        <Routes>
+          <Route exact path='/' element={<LoginPage />} /> {/* Im pretty sure this is going to be the *homepage */}
+          <Route path = '/register' element={<RegisterPage />} /> 
+          <Route path = '/loading' element={<LoadingPage />} />
+          <Route path = '/DiningHall' element={<DiningHall />} />
+        </Routes>
+      </div>
+    </Router>
+    
+  );
+}
+
+export default App;
+
+
+/*import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { Spinner } from "react-bootstrap";
 import DiningHall from "./DiningHall/DiningHall.js";
@@ -58,3 +86,4 @@ function App() {
 }
 
 export default App;
+*/

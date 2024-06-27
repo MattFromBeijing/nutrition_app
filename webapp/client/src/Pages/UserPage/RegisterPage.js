@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaExclamation, FaCheck } from "react-icons/fa6";
-import "./registerPage.css"
-import LoginPage from "./loginPage";
+import "./RegisterPage.css"
+import LoginPage from "./LoginPage";
 import { Link } from "react-router-dom";
 
 const USER_REGEX = /^[a-zA-Z0-9-_]{4,24}$/;

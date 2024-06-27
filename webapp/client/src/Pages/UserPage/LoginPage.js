@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import './loginPage.css'
+import './LoginPage.css'
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
-import RegisterPage from './registerPage';
+import { GoTriangleRight } from "react-icons/go";
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -55,6 +55,10 @@ const LoginPage = () => {
                     <p>Don't have an account? <Link to='/register'>Register</Link> </p>
                 </div>
             </form>
+            <div className='continue'>
+                <Link to = '/loading'>Continue to the the menu</Link> 
+                <GoTriangleRight className='next-icon'/>
+            </div>
         </div>
     )
 }
