@@ -30,6 +30,8 @@ function LoadingPage() {
       });
   }, []);
 
+
+
   return (
     <div className="loading-body">
       {loading ? (

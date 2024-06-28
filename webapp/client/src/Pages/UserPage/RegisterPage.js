@@ -70,14 +70,13 @@ export const RegisterPage = () => { //tf must be capitalized
         setSuccess(true);
     }
     
-    const visi = () =>{
-        setVis(true);
-        alert('clicked')
+    const toggleVisi = () =>{
+        setVis(prevState => !prevState);
     }
+
 
   return (
     <>
-    
         <section className="wrapper">
             <p
                 ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive"
@@ -113,9 +112,9 @@ export const RegisterPage = () => { //tf must be capitalized
                     Only Letters, numbers, underscores, hyphens are allowed.
                 </p>
                 <div  className="input-box">
-                    <IoMdEye className="icon-eye" onClick={visi} />
+                    
                     <input
-                    type="password"
+                    type={vis ? 'text' : 'password'}
                     id="password"
                     placeholder="Password"
                     onChange={(e) => setPswd(e.target.value)}
@@ -126,6 +125,16 @@ export const RegisterPage = () => { //tf must be capitalized
                     aria-describedby="pswdnote"
                     onFocus={() => setPswdFocus(true)}
                     onBlur={() => setPswdFocus(false)}
+                    />
+                    <IoMdEyeOff
+                        className="icon-eye"
+                        onClick={toggleVisi}
+                        style={{ display: vis ? 'none' : 'block' }}
+                    />
+                    <IoMdEye
+                        className="icon-eye"
+                        onClick={toggleVisi}
+                        style={{ display: vis? 'block' : 'none' }}
                     />
                     <FaCheck className={pswd && validPswd ? "check-icon" : "offscreen"} />
                 </div>

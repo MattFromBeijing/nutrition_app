@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'); 
 .wrapper {
-    width: 520px;
+    width: 360px;
     height: auto;
     background-color: white;
     color: rgb(0, 30, 68);
@@ -91,4 +91,5 @@
     transform: translateY(-50%);
     font-size: 20px;
     cursor: pointer;
+    z-index: 2;
 }

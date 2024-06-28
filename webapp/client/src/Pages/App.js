@@ -6,7 +6,7 @@ import LoadingPage from './LoadingPage/LoadingPage';
 import DiningHall from "./DiningHall/DiningHall.js";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-function App() {
+function App() { //Need to fix the route for Dining Hall to be seperate from loading
   return (
     <Router>
       <div className='App'>
