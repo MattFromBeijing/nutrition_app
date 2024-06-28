@@ -1,11 +1,8 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import bcrypt from 'bcrypt';
-import client from './db';
 
-const dataRouter = express.Router()
 
-dataRouter.use(bodyParser.json());
+const registerRouter = express.Router()
 
 
 client.connect(err => {
@@ -20,7 +17,7 @@ client.connect(err => {
   const usersCollection = db.collection('users')
   
   //Route to Register
-  dataRouter.post('/register', async (req, res) => {
+  registerRouter.post('/register', async (req, res) => {
     const { username, password} = req.body;
     try{
       const existing = await usersCollection.findOne({ username })
@@ -28,18 +25,21 @@ client.connect(err => {
         return res.status(409).send('Username already taken. Please try another one.')
       }
   
-      const hasedPassword = await bcrypt.hash(password, 10)
+      const hashedPassword = await bcrypt.hash(password, 10)
   
       const newUser = {
-        userName: username,
-        password: hasedPassword
+        username,
+        password: hashedPassword
       }
   
-      await usersCollection.insertOne(newUser)
-  
+      await usersCollection.insertOne(newUser);
+      res.status(201).send('User successfully registered');
     } catch (error){
-  
+      console.log('Error occured as:', error);
+      res.status(500).send('Internal server error');
     }
   })
+
+  export default registerRouter;
   
   

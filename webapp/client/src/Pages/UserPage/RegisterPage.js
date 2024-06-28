@@ -5,6 +5,8 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import "./RegisterPage.css"
 import LoginPage from "./LoginPage";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+
 
 const USER_REGEX = /^[a-zA-Z0-9-_]{4,24}$/;
 const PSWD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
@@ -67,7 +69,37 @@ export const RegisterPage = () => { //tf must be capitalized
             setErrMsg("Invalid Entry");
             return;
         }
-        setSuccess(true);
+        try{
+            const response = await axios.post('http://localhost:5000/api/register',
+            {username: user, password: pswd},
+            {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            }    
+        ); //Going to the route of api/register, we can pass the contents to db
+            
+            if(response.status === 201){
+                setSuccess(true);
+            }
+            else if(response.status === 409){
+                setErrMsg('Username already taken!');
+            }
+            else{
+                setErrMsg('Regisration Failed');
+            }
+        }
+        catch(error){
+            if(!error.response){
+                setErrMsg('No Server Response. Please try refreshing')
+            }
+            else if(error.response.status === 409){
+                setErrMsg('Username already taken!');
+            }
+            else{
+                setErrMsg('Registration Failed')
+            }
+            errRef.current.focus();
+        }
     }
     
     const toggleVisi = () =>{
@@ -78,11 +110,6 @@ export const RegisterPage = () => { //tf must be capitalized
   return (
     <>
         <section className="wrapper">
-            <p
-                ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive"
-            >
-            {errMsg}
-            </p>
             <h1>
                 Register
             </h1>
@@ -178,6 +205,11 @@ export const RegisterPage = () => { //tf must be capitalized
                         <p>Already have an account? <Link to="/">Login</Link> </p>
                 </div>
             </form>
+            <p
+                ref={errRef} className={errMsg ? "instructions" : "offscreen"} aria-live="assertive"
+            >
+            {errMsg}
+            </p>
         </section>
     </>
   )
