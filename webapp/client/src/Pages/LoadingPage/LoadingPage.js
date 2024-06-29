@@ -1,8 +1,12 @@
 import "./LoadingPage.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import axios from "axios";
 import { useEffect, useState } from 'react';
 import { Spinner } from "react-bootstrap";
 import DiningHall from "../DiningHall/DiningHall";
+
+//You can use useHistory hook and useLocation hook to pass props to components
+//The useHistory hook is able to pass states into the components you want and the useLocation can access the states
 
 function LoadingPage() {
   const [locations, setLocations] = useState([]);
@@ -10,7 +14,7 @@ function LoadingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+/* useEffect(() => {
     fetch('/data/getMenu')
       .then((res) => {
         if (!res.ok) {
@@ -28,7 +32,15 @@ function LoadingPage() {
         setError(e.message);
         setLoading(false);
       });
-  }, []);
+  }, []);*/
+
+  useEffect(() => {
+
+  },[]);
+
+  const getData = async () => {
+    const fetching = await axios.get('http://localhost:5000/data/getMenu')
+  }
 
 
 

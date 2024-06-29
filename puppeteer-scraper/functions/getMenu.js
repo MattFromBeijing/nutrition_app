@@ -78,7 +78,7 @@ export const getMenu = async () => {
                 console.log(`Scraping menu for ${location.name} during ${time}`);
                 await page.select('#selMeal', time); // Select each of the times
                 // you can add a timeout here
-                await setTimeout(500);
+                await setTimeout(750);
                 await page.evaluate(() => {
                     document.forms['frmMenuFilters'].submit();
                 });
@@ -90,7 +90,9 @@ export const getMenu = async () => {
                         .filter(link => link.textContent.includes('Nutrition') || link.href.includes('nutrition'))
                         .map(link => ({
                             href: link.href,
-                            text: link.innerText
+                            text: link.innerText,
+                            location: location.name,
+                            time: time
                         }));
                 });
 

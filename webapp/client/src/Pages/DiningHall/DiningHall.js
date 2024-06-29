@@ -89,7 +89,7 @@ function DiningHall(props) {
             <img alt="" src="/pennState_nutrition_resized.png" style={{ width: '360px', height: 'auto' }}/>
           </div>
           <div className="content-wrapper">
-            <p style={{ height: "1.5em", letterSpacing: "-1px", margin: "0px",}}>–––––––––––&nbsp;&nbsp;&nbsp;Select a location&nbsp;&nbsp;&nbsp;–––––––––––</p>
+            <p style={{ height: "1.5em", letterSpacing: "-1px", margin: "0px",}}>–––––––––&nbsp;&nbsp;&nbsp;Select a location&nbsp;&nbsp;&nbsp;–––––––––</p>
             <div className="content">
               {props.locations.map((name) => (
                 <LocationCard key={name} location={name} image={locationImages[name]}/>

@@ -30,7 +30,7 @@ export const RegisterPage = () => { //tf must be capitalized
     const [confirmFocus, setConfirmFocus] = useState(false);
 
     const [errMsg, setErrMsg] = useState('');
-    const [sucess, setSuccess] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -56,7 +56,7 @@ export const RegisterPage = () => { //tf must be capitalized
         setValidConfirm(match);//This will pass a boolean to whether the password are matching
     }, [pswd, confirmPswd])
 
-    useEffect(() => {
+    useEffect(() => { //If either of these change, see if there is an error
       setErrMsg('');
     }, [user, pswd, confirmPswd]);
 
@@ -100,6 +100,7 @@ export const RegisterPage = () => { //tf must be capitalized
             }
             errRef.current.focus();
         }
+
     }
     
     const toggleVisi = () =>{
@@ -109,6 +110,16 @@ export const RegisterPage = () => { //tf must be capitalized
 
   return (
     <>
+    {success ? (
+        <section className="sucess-page">
+            <h1>Sucess!</h1>
+            <div className="register-link">
+                <p>
+                    Go to login <Link to='/'>Here</Link>
+                </p>
+            </div>
+        </section>
+    ) : (
         <section className="wrapper">
             <h1>
                 Register
@@ -211,6 +222,7 @@ export const RegisterPage = () => { //tf must be capitalized
             {errMsg}
             </p>
         </section>
+    )}
     </>
   )
 

@@ -36,10 +36,11 @@
     background-color: #f8d7da; /* Light red background */
     color: #721c24; /* Dark red text */
     border: 1px solid #f5c6cb; /* Light red border */
-    padding: 10px; /* Padding around the text */
+    padding: 11px; /* Padding around the text */
     border-radius: 4px; /* Rounded corners */
     position: relative; /* Position relative to create the arrow */
     margin-left: 10px; /* Space between input and alert box */
+    margin-top: 10px;
     display: flex;
     align-items: center;
 }
@@ -92,4 +93,17 @@
     font-size: 20px;
     cursor: pointer;
     z-index: 2;
+}
+
+.sucess-page{
+    width: 320px;
+    height: 320px;
+    background-color: white;
+    padding-top: 35%;
+    
+}
+
+.success-page.h1 {
+    font-weight: 700;
+    text-align: center;
 }

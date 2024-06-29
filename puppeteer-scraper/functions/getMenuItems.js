@@ -1,5 +1,81 @@
-import puppeteer from "puppeteer";
+import puppeteer from 'puppeteer';
+import { setTimeout } from 'timers/promises';
 
+// DELETE ALL THE CONSOLE LOGS WHEN DONE TESTING THIS PROGRAM CUZ IT SLOWS IT DOWN
+
+export const getMenuItems = async (links) => {
+    try {
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+        console.log("Browser launched");
+
+        let fullMenu = [];
+
+        // Use Promise.all to handle each link in parallel
+        const linkPromises = links.map(async (link) => {
+            try {
+                const page = await browser.newPage();
+                await page.goto(link.href, { waitUntil: 'domcontentloaded' });
+                console.log(`Navigated to ${link.href}`);
+
+                const nutritionFacts = await page.evaluate(() => {
+                    const labels = ["Serving Size", "Calories", "Total Fat", "Sat Fat", "Trans Fat", 
+                                    "Cholesterol", "Sodium", "Total Carb", "Dietary Fiber", "Sugars", "Protein"];
+                    let facts = {};
+
+                    labels.forEach(label => {
+                        let element = Array.from(document.querySelectorAll('b')).find(b => b.innerText.includes(label));
+                        if (element) {
+                            facts[label] = element.nextSibling.textContent.trim();
+                        }
+                    });
+
+                    return facts;
+                });
+
+                // Initialize the location and time objects in fullMenu if they don't exist
+                if (!fullMenu[link.location]) {
+                    fullMenu[link.location] = {
+                        Breakfast: [],
+                        Lunch: [],
+                        Dinner: []
+                    };
+                }
+
+                // Add the scraped nutritional facts to the corresponding location and time
+                fullMenu[link.location][link.time].push({
+                    name: link.text,
+                    href: link.href,
+                    ...nutritionFacts
+                });
+
+                console.log(`Nutritional facts collected for ${link.location} during ${link.time}:`, nutritionFacts);
+                await page.close();
+            } catch (error) {
+                console.error(`Error collecting nutritional facts from ${link.href}:`, error);
+            }
+        });
+
+        // Await all link promises
+        await Promise.all(linkPromises);
+
+        await browser.close();
+        console.log("Browser closed");
+
+        return fullMenu;
+
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+};
+
+
+
+
+
+/*
 export const getMenuItems = async (location, link) => {
   const browser = await puppeteer.launch({
       headless: false,
@@ -89,7 +165,7 @@ export const getMenuItems = async (location, link) => {
   
   await browser.close();
   return fullMenu;
-}
+} */
 
 /*const location = "Altoona, Port Sky Cafe";
 const link = "https://menu.hfs.psu.edu/shortmenu.aspx?sName=Penn+State+Housing+and+Food+Services&locationNum=40&locationName=Altoona%2c+Port+Sky+Cafe&naFlag=1"

@@ -1,5 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
+import client from '../db.js';
 
 
 const registerRouter = express.Router()
@@ -18,7 +19,7 @@ client.connect(err => {
   
   //Route to Register
   registerRouter.post('/register', async (req, res) => {
-    const { username, password} = req.body;
+    const { username, password} = req.body; //gets the values from the API request
     try{
       const existing = await usersCollection.findOne({ username })
       if (existing) {

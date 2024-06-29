@@ -1,67 +1,148 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './LoginPage.css'
 import { FaUser } from "react-icons/fa";
-import { FaLock } from "react-icons/fa";
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { GoTriangleRight } from "react-icons/go";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginPage = () => {
-    const [register, setRegister] = useState(false);
+    const userRef = useRef(); //used to be able to capture user
+    const errRef = useRef(); // used to capture the error and annouce it when caught
 
-        
-    const handleClick = () => {
-        setRegister(true);
+    const [register, setRegister] = useState(false);
+    const [vis, setVis] = useState(false);
+
+    const [username, setUsername] = useState('');
+    const [userFocus, setUserFocus] = useState(false);
+
+    const [pswd, setPswd] = useState('');
+    const [pswdFocus, setPswdFocus] = useState(false);
+
+    const [errMsg, setErrMsg] = useState('');
+    const [success, setSuccess] = useState(false);
+
+    useEffect(() =>{
+        userRef.current.focus();
+    }, []);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try{
+            const response = await axios.post('http://localhost:5000/api/login',
+            {username, password: pswd},
+            {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            }    
+        ); //Going to the route of api/register, we can pass the contents to db
+            
+            if(response.status === 200){
+                setSuccess(true);
+                //history.push('/loading');
+            }
+            else if(response.status === 404){
+                setErrMsg('Username and/or password are incorrect.');
+            }
+            else{
+                setErrMsg('Login Failed');
+            }
+        }
+        catch(err){
+            if(err.response.status === 404){
+                setErrMsg('Username and/or password are incorrect.');
+            }
+            else{
+                setErrMsg('Login Failed')
+            }
+        }
+    };
+
+    const toggleVisi = () => {
+        setVis(prevState => !prevState);
     }
 
-    
     return(
-        <div className='wrapper'>
-            <form 
-            action=''
-            >
-                <h1>Login</h1>
-                <div className='input-box'> 
-                    <FaUser className='icon'/>
-                    <input 
-                    type='text' 
-                    placeholder='Username' 
-                    required 
-                    />
+        <>
+        {success ? (
+            <section className="sucess-page">
+                <h1>Sucess!</h1>
+                <div className="register-link">
+                    <p>
+                        Go to Menu <Link to='/loading'>Here</Link>
+                    </p>
                 </div>
-                <div className='input-box'>
-                    <FaLock className='icon '/>
-                    <input 
-                    type='password' 
-                    placeholder='Password' 
-                    required 
-                    /> 
-                </div>
-
-               <div className='remember-forgot'>
-                    <label>
+            </section>
+        ):(
+            <div className='wrapper'>
+                <form onSubmit={handleSubmit}>
+                    <h1>Login</h1>
+                    <div className='input-box'> 
+                        <FaUser className='icon'/>
                         <input 
-                        type='checkbox' 
+                        type='text' 
+                        id='username'
+                        ref={userRef}
+                        placeholder='Username' 
+                        required 
+                        onChange={(e) => setUsername(e.target.value)} // Changed to properly update state
+                        onFocus={() => setUserFocus(true)} // Correctly set focus state
                         />
-                        Remember me
-                    </label>
-                    <a href='#'>Forgot Password?</a>
-               </div>
+                    </div>
+                    <div className='input-box'>
+                        <input 
+                        type={vis ? 'text' : 'password'}
+                        id='password'
+                        placeholder='Password' 
+                        required 
+                        onChange={(e) => setPswd(e.target.value)} // Changed to properly update state
+                        onFocus={() => setPswdFocus(true)} // Correctly set focus state
+                        /> 
+                    <IoMdEyeOff
+                        className="icon-eye"
+                        onClick={toggleVisi}
+                        style={{ display: vis ? 'none' : 'block' }}
+                    />
+                    <IoMdEye
+                        className="icon-eye"
+                        onClick={toggleVisi}
+                        style={{ display: vis? 'block' : 'none' }}
+                    />
+                    </div>
 
-               <button
-               type='submit'
-               className='button'
-               >Login</button>
-                <div className='register-link'>
-                    <p>Don't have an account? <Link to='/register'>Register</Link> </p>
+                <div className='remember-forgot'>
+                        <label>
+                            <input 
+                            type='checkbox' 
+                            />
+                            Remember me
+                        </label>
+                        <a href='#'>Forgot Password?</a> {/* Add the forgot password logic here */}
                 </div>
-            </form>
-            <div className='continue'>
-                <Link to = '/loading'>Continue to the the menu
-                <GoTriangleRight className='next-icon'/>
-                </Link> 
-                
-            </div>  
-        </div>
+
+                    <button
+                        onClick={handleSubmit}
+                        className='button'
+                    >Login</button>
+                    <div className='register-link'>
+                        <p>Don't have an account? <Link to='/register'>Register</Link> </p>
+                    </div>
+                </form>
+                <div className='continue'>
+                    <Link to = '/loading'>Continue to the the menu
+                    <GoTriangleRight className='next-icon'/>
+                    </Link> 
+                    
+                </div>
+                <p
+                ref={errRef} className={errMsg ? "instructions" : "offscreen"} aria-live="assertive"
+                >
+                {errMsg}
+            </p>  
+            </div>
+            )
+        }
+    </>
     )
 }
 
