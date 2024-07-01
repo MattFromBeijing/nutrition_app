@@ -18,8 +18,16 @@ const scrapeMenus = async () => {
 
     const collection = client.db("test1").collection("new_menu");
 
+    //This will combine them all into an aggregated object
+    const documents = Object.keys(fullMenu).map(location => ({
+      location,
+      Breakfast: fullMenu[location].Breakfast,
+      Lunch: fullMenu[location].Lunch,
+      Dinner: fullMenu[location].Dinner
+    }));
+
     // Prepare the data for insertion
-    const documents = [];
+    /*const documents = [];
     for (const location in fullMenu) {
       for (const time in fullMenu[location]) {
         fullMenu[location][time].forEach(item => {
@@ -30,7 +38,7 @@ const scrapeMenus = async () => {
           });
         });
       }
-    }
+    }*/
 
     // Check if there are documents to insert
     if (documents.length > 0) {
@@ -77,7 +85,7 @@ const scrapeMenus = async () => {
 }
   */
 
-await scrapeMenus();
+
 
 /* 
   if (webPages.length === 0) return todayMenus;

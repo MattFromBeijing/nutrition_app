@@ -11,7 +11,7 @@ export const getMenuItems = async (links) => {
         });
         console.log("Browser launched");
 
-        let fullMenu = [];
+        let fullMenu = {};
 
         // Use Promise.all to handle each link in parallel
         const linkPromises = links.map(async (link) => {
