@@ -4,16 +4,16 @@ import client from '../db.js';
 
 const loginRouter = express.Router();
 
-client.connect(err => {
-    if (err) {
-      console.log('Failed to connect to MongoDB', err)
-      process.exit(1);
-    }
-    console.log('Connected to MongoDB')
-  })
-  
-  const db = client.db('user')
-  const usersCollection = db.collection('users')
+// client.connect(err => {
+// if (err) {
+//     console.log('Failed to connect to MongoDB', err)
+//     process.exit(1);
+// }
+// console.log('Connected to MongoDB')
+// })
+
+const db = client.db('user')
+const usersCollection = db.collection('users')
 
 loginRouter.post( '/login', async (req, res) => {
     const {username, password} = req.body;

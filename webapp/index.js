@@ -5,6 +5,7 @@ import cors from 'cors';
 import dataRouter from './routes/data.js'
 import registerRouter from './routes/registerRouter.js';
 import loginRouter from './routes/loginRouter.js';
+import client from './db.js'
 
 
 const app = express();
@@ -24,10 +25,10 @@ app.use("/data", dataRouter)
 app.use('/api', registerRouter)
 app.use('/api', loginRouter);
 
-
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
+
 /*const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -36,3 +37,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build/index.html'));
 });*/
+
+process.on('SIGTERM', () => {
+  console.info('MongoDB connection closed!')
+  client.close();
+});

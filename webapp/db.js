@@ -8,5 +8,13 @@ const client = new MongoClient(uri, {
     maxPoolSize: 50,
 });
 
+client.connect(err => {
+    if (err) {
+        console.log('Failed to connect to MongoDB', err)
+        process.exit(1);
+    }
+    console.log('Connected to MongoDB')
+})
+
 export default client;
 

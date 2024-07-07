@@ -3,7 +3,7 @@ import './LoginPage.css'
 import { FaUser } from "react-icons/fa";
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { GoTriangleRight } from "react-icons/go";
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 
 const LoginPage = () => {
@@ -34,7 +34,7 @@ const LoginPage = () => {
             {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
-            }    
+            }
         ); //Going to the route of api/register, we can pass the contents to db
             
             if(response.status === 200){
@@ -64,85 +64,86 @@ const LoginPage = () => {
 
     return(
         <>
-        {success ? (
-            <section className="sucess-page">
-                <h1>Sucess!</h1>
-                <div className="register-link">
-                    <p>
-                        Go to Menu <Link to='/loading'>Here</Link>
-                    </p>
-                </div>
-            </section>
-        ):(
-            <div className='wrapper'>
-                <form onSubmit={handleSubmit}>
-                    <h1>Login</h1>
-                    <div className='input-box'> 
-                        <FaUser className='icon'/>
-                        <input 
-                        type='text' 
-                        id='username'
-                        ref={userRef}
-                        placeholder='Username' 
-                        required 
-                        onChange={(e) => setUsername(e.target.value)} // Changed to properly update state
-                        onFocus={() => setUserFocus(true)} // Correctly set focus state
-                        />
-                    </div>
-                    <div className='input-box'>
-                        <input 
-                        type={vis ? 'text' : 'password'}
-                        id='password'
-                        placeholder='Password' 
-                        required 
-                        onChange={(e) => setPswd(e.target.value)} // Changed to properly update state
-                        onFocus={() => setPswdFocus(true)} // Correctly set focus state
-                        /> 
-                    <IoMdEyeOff
-                        className="icon-eye"
-                        onClick={toggleVisi}
-                        style={{ display: vis ? 'none' : 'block' }}
-                    />
-                    <IoMdEye
-                        className="icon-eye"
-                        onClick={toggleVisi}
-                        style={{ display: vis? 'block' : 'none' }}
-                    />
-                    </div>
-
-                <div className='remember-forgot'>
-                        <label>
+            {success ? (
+                <section className="sucess-page">
+                    {/* <h1>Success!</h1>
+                    <div className="register-link">
+                        <p>
+                            Go to Menu <Link to='/halls'>Here</Link>
+                        </p>
+                    </div> */}
+                    <Navigate to="/halls"/>
+                </section>
+            ):(
+                <div className='wrapper'>
+                    <form onSubmit={handleSubmit}>
+                        <h1>Login</h1>
+                        <div className='input-box'> 
+                            <FaUser className='icon'/>
                             <input 
-                            type='checkbox' 
+                            type='text' 
+                            id='username'
+                            ref={userRef}
+                            placeholder='Username' 
+                            required 
+                            onChange={(e) => setUsername(e.target.value)} // Changed to properly update state
+                            onFocus={() => setUserFocus(true)} // Correctly set focus state
                             />
-                            Remember me
-                        </label>
-                        <a href='#'>Forgot Password?</a> {/* Add the forgot password logic here */}
-                </div>
+                        </div>
+                        <div className='input-box'>
+                            <input 
+                            type={vis ? 'text' : 'password'}
+                            id='password'
+                            placeholder='Password' 
+                            required 
+                            onChange={(e) => setPswd(e.target.value)} // Changed to properly update state
+                            onFocus={() => setPswdFocus(true)} // Correctly set focus state
+                            /> 
+                        <IoMdEyeOff
+                            className="icon-eye"
+                            onClick={toggleVisi}
+                            style={{ display: vis ? 'none' : 'block' }}
+                        />
+                        <IoMdEye
+                            className="icon-eye"
+                            onClick={toggleVisi}
+                            style={{ display: vis? 'block' : 'none' }}
+                        />
+                        </div>
 
-                    <button
-                        onClick={handleSubmit}
-                        className='button'
-                    >Login</button>
-                    <div className='register-link'>
-                        <p>Don't have an account? <Link to='/register'>Register</Link> </p>
+                    <div className='remember-forgot'>
+                            <label>
+                                <input 
+                                type='checkbox' 
+                                />
+                                Remember me
+                            </label>
+                            <a href='#'>Forgot Password?</a> {/* Add the forgot password logic here */}
                     </div>
-                </form>
-                <div className='continue'>
-                    <Link to = '/loading'>Continue to the the menu
-                    <GoTriangleRight className='next-icon'/>
-                    </Link> 
-                    
+
+                        <button
+                            onClick={handleSubmit}
+                            className='button'
+                        >Login</button>
+                        <div className='register-link'>
+                            <p>Don't have an account? <Link to='/register'>Register</Link> </p>
+                        </div>
+                    </form>
+                    <div className='continue'>
+                        <Link to = '/loading'>Continue to the the menu
+                        <GoTriangleRight className='next-icon'/>
+                        </Link> 
+                        
+                    </div>
+                    <p
+                    ref={errRef} className={errMsg ? "instructions" : "offscreen"} aria-live="assertive"
+                    >
+                    {errMsg}
+                </p>  
                 </div>
-                <p
-                ref={errRef} className={errMsg ? "instructions" : "offscreen"} aria-live="assertive"
-                >
-                {errMsg}
-            </p>  
-            </div>
-            )
-        }
-    </>
+                )
+            }
+        </>
     )
 }
 
