@@ -36,7 +36,7 @@ registerRouter.post('/register', async (req, res) => {
     await usersCollection.insertOne(newUser);
     res.status(201).send('User successfully registered');
   } catch (error){
-    console.log('Error occured as:', error);
+    console.error('Error occured as:', error);
     res.status(500).send('Internal server error');
   }
 })

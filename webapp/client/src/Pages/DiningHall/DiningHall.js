@@ -151,7 +151,7 @@ function DiningHall() {
               <img alt="" src="/pennState_nutrition_resized.png" style={{ width: '360px', height: 'auto' }}/>
             </div>
             <div className="content-wrapper">
-              <p style={{ height: "1.5em", letterSpacing: "-1px", margin: "0px",}}>–––––––––&nbsp;&nbsp;&nbsp;Select a location&nbsp;&nbsp;&nbsp;–––––––––</p>
+              <p style={{ height: "1.5em", letterSpacing: "-1px", margin: "0px",}}>&nbsp;&nbsp;&nbsp;Select a location&nbsp;&nbsp;&nbsp;</p>
               <div className="content">
                 {locationNames.map((name) => (
                   <LocationCard key={name} location={name} active={activeLocations[name]} image={locationImages[name]}/>

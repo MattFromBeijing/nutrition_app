@@ -72,6 +72,22 @@ function MenuPage() {
     getLocationMenu(location)
   }, [])
 
+  const getRecMenu = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/getRecMenu',
+        {
+          params: {locationMenu: menu, dietType: {}, userData: {}}, // not complete, missing dietType and userData
+          headers: {'Content-Type': 'application/json'},
+          withCredentials: true
+        }
+      )
+      console.log(response)
+    } catch (e) {
+      setError(e)
+      console.error(e)
+    }
+  }
+
   const ItemCard = ({ element, index }) => {
     return (
       <Card onClick={() => {handleClick(index)}} aria-controls="item-info" aria-expanded={openIndices === index}>

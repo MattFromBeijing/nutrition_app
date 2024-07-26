@@ -71,7 +71,7 @@ dataRouter.get("/getLocationMenu", async (req, res) => {
         const locationName = req.query.locationName;
         const result = await new_menu.find({ "location" : {$eq : locationName}}).toArray()
         
-        console.log(result)
+        // console.log(result)
 
         res.send(result[0])
     } catch (e) {
