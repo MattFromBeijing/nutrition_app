@@ -1,55 +1,114 @@
-.card {
-    margin: 20px;
+.logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    opacity: 100%;
+    color: white;
+    max-width: fit-content;
+    cursor: pointer;
+}
+
+.logo-text {
+    text-align: left;
+    line-height: 3rem;
+}
+
+    .logo-text p.logo-title {
+        font-size: 4rem;
+        margin: 0 0 0 0;
+    }
+
+    .logo-text p.logo-subtitle {
+        font-size: 1.5rem;
+        margin: 0 0 0 0;
+    }
+
+.hall-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1rem;
+
+    color: white;
+    text-align: start;
 }
 
 p.title {
-    text-align: center;
-    margin-top: 20px;
+    font-size: 2rem;
+    margin: 0 0 0 0;
+    text-align: start;
 }
 
-.logo {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-
-    top: 0;
-    left: 50%;
-    padding: 1em;
-    transform: translate(-50%, -12%);
-    font-size: 50px;
-    opacity: 100%;
-}
-
-.content-wrapper {
-    position: relative;
-    transform: translateY(21%);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-bottom: 10px;
-
-    /*font-family: "Proxima Nova";*/
-    color: white;
-    text-align: center;
-}
-
-.content {
-    position: relative;
-    /* transform: translateY(20%);
-    overflow: hidden; */
-
+.hall-content {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
     flex-wrap: wrap;
-    padding-bottom: 10px;
-
-    /* font-family: "Proxima Nova";
-    color: white; */
-};
-
-.location {
-    text-align: center;
-    margin: 20px;
+    justify-content: center;
+    
+    margin: 0.5rem 0 0 0;
+    gap: 1rem;
+    flex-grow: 1;
 }
+
+.hall-card {
+    display: flex;
+    flex-direction: row;
+
+    background-color: white;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    width: 27rem;
+    height: 13.5rem;
+}
+
+    .hall-card .img-area {
+        flex-basis: 50%;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hall-card .text-area {
+        flex-basis: 45%;
+
+        padding: 0.5rem 0 0.5rem 0;
+    }
+
+        .hall-card .text-area p.location {
+            font-size: 1.3rem;
+            color: black;
+            height: 2.3em;
+            margin: 0 0 1rem 0;
+        }
+
+    .hall-card.active {
+        cursor: pointer;
+        border-radius: 1.6rem;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+        .hall-card.active:hover {
+            box-shadow: 0.3rem 0.3rem black;
+            transform: translateY(-0.3rem) translateX(-0.3rem);
+        }
+
+        .hall-card.active .text-area p.description {
+            font-size: 1rem;
+            color: grey;
+            margin: 0 0 0 0;
+        }
+
+    .hall-card.inactive {
+        opacity: 70%;
+        cursor: not-allowed;
+    }
+
+        .hall-card.inactive .text-area p.description {
+            font-size: 1rem;
+            color: red;
+            margin: 0 0 0 0;
+        }

@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import minimize
 
-def bulking(locationMenu, nutReq):
+def bulking(locationMenu, nutReq, init_guess=None):
     """
     locationMenu: location's menu
     nutReq: user's nutrition requirements, 
@@ -95,6 +95,9 @@ def bulking(locationMenu, nutReq):
 
     # Final optimized decision variables
     finalSolution = solution2.x
-    selected_dishes = [(str(dishes[i]), round(finalSolution[i])) for i in range(len(dishes)) if finalSolution[i] > 0.5]
+    selected_dishes = [(i, str(dishes[i]), round(finalSolution[i])) for i in range(len(dishes)) if finalSolution[i] > 0.5]
 
-    return selected_dishes
+    if init_guess == None:
+        return finalSolution
+    else:
+        return selected_dishes

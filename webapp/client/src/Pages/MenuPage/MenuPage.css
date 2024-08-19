@@ -1,31 +1,248 @@
-p.title {
-    text-align: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
+.logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
 
-.card {
-    margin: 10px;
-    padding: 10px;
+    opacity: 100%;
+    color: white;
+    max-width: fit-content;
     cursor: pointer;
 }
 
-.card .card-title {
-    margin-bottom: 0px;
+.logo-text {
+    text-align: left;
+    line-height: 3rem;
 }
 
-p.subtitle {
-    text-align: center;
-    margin-top: 1px;
-    margin-bottom: 1px;
+    .logo-text p.logo-title {
+        font-size: 4rem;
+        margin: 0 0 0 0;
+    }
+
+    .logo-text p.logo-subtitle {
+        font-size: 1.5rem;
+        margin: 0 0 0 0;
+    }
+
+.menu-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1rem;
+
+    color: white;
+    text-align: start;
 }
 
-.transition-wrapper {
-    margin: 0px;
-    padding: 0px;
+img.banner {
+    width: 100vh;
+    height: 30vh;
+    object-fit: cover;
+    border-radius: 1.6rem;
+    margin: 1rem 0 1rem 0;
 }
 
-.modal-90w {
-    max-width: 320px;
+p.location-name {
+    font-size: 2rem;
+    margin: 0 0 1rem 0;
 }
 
+.menu-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.item-card {
+    display: flex;
+    justify-content: center;
+
+    background-color: white;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    width: 27rem;
+    height: 13.5rem;
+
+    transition: transform 0.2s ease-in-out;
+}
+
+    .item-card.shrink-grow {
+        transform: scale(1.05);
+    }
+
+    .item-card .content-area {
+        width: 90%;
+        
+        display: flex;
+        flex-direction: column;
+
+        padding: 0.5rem 0 0.5rem 0;
+    }
+
+        .item-card .content-area .title-area {
+            flex-basis: 25%;
+
+            display: flex;
+            flex-direction: row;
+
+            height: 3.5rem;
+            width: 100%;
+            margin: 0.5rem 0 0.5rem 0;
+        }
+
+            .item-card .content-area .title-area p.name {
+                flex-basis: 85%;
+
+                font-size: 1.5rem;
+                line-height: 1.7rem;
+                color: black;
+                margin: 0 0 0 0;
+            }
+
+            .item-card .content-area .title-area .counter-area {
+                flex-basis: 15%;
+
+                display: flex;
+                justify-content: center;
+
+                height: 100%;
+            }
+
+                .item-card .content-area .title-area .counter-area .counter.active {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    border: 0.2rem solid lightgray;
+                    box-shadow: 0rem 0rem 1rem lightgray;
+                    height: 2.6rem;
+                    width: 2.6rem;
+                    border-radius: 1.3rem;
+                }
+
+                    .item-card .content-area .title-area .counter-area .counter.active p.number {
+                        font-size: 1.2rem;
+                        color: black;
+                        font-weight: bold;
+                        margin: 0 0 0 0;             
+                    }
+                
+                .item-card .content-area .title-area .counter-area .counter.inactive {
+                    height: 2.6rem;
+                    width: 2.6rem;
+                    border-radius: 1.3rem;
+                    opacity: 0%;
+                }
+
+        .item-card .content-area .info-area {
+            flex-basis: 75%;
+
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+            width: 100%;
+        }
+
+            .item-card .content-area .info-area .left {
+                flex-basis: 42.5%;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                height: 100%;
+                gap: 0.5rem;
+                font-size: 1rem;
+                color: black;
+            }
+
+                .item-card .content-area .info-area .left p {
+                    margin: 0.5rem 0 0.5rem 0;
+                }
+
+            .item-card .content-area .info-area .right {
+                flex-basis: 42.5%;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                
+                height: 100%;
+                gap: 0.5rem;
+                font-size: 1rem;
+                color: black;
+            }
+            
+                .item-card .content-area .info-area .right p {
+                    margin: 0.5rem 0 0.5rem 0;
+                }
+
+            .item-card .content-area .info-area .end {
+                flex-basis: 15%;
+
+                display: flex;
+                flex-direction: column-reverse;
+                justify-content: end;
+
+                height: 100%;
+            }
+
+                .item-card .content-area .info-area .end .button-area {
+                    /* border: 1px solid black; */
+                    
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                    
+                    height: 100%;
+                    gap: 0.5rem;
+                    position: relative;
+                }
+
+                    .item-card .content-area .info-area .end .button-area .filler {
+                        border: 0.2rem solid;
+                        box-shadow: 0rem 0rem 1rem;
+                        height: 1.8rem;
+                        width: 1.8rem;
+                        border-radius: 0.9rem;
+                        opacity: 0%;
+                    }
+
+                    .item-card .content-area .info-area .end .button-area .button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        border: 0.2rem solid lightgray;
+                        box-shadow: 0rem 0rem 1rem lightgray;
+                        height: 1.8rem;
+                        width: 1.8rem;
+                        border-radius: 0.9rem;
+                    }
+
+                        .item-card .content-area .info-area .end .button-area .button p.icon {
+                            font-size: 0.8rem;
+                            color: black;
+                            font-weight: bold;
+                            margin: 0 0 0 0;
+                        }
+
+                        .item-card .content-area .info-area .end .button-area .button.active {
+                            cursor: pointer;
+                            transition: transform 0.2s ease;
+                        }
+
+                            .item-card .content-area .info-area .end .button-area .button.active:hover {
+                                transform: scale(1.2);
+                            }
+
+                        .item-card .content-area .info-area .end .button-area .button.inactive {
+                            cursor: not-allowed;
+                            opacity: 50%;
+                        }

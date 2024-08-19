@@ -1,15 +1,17 @@
 .App {
     text-align: center;
+    height: 100%;
+    padding: 10px 20px 20px 20px;
   }
 
- body {
+  /* body {
     font-family: "Poppins", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: rgb(30, 64, 124);
-}
+  } */
 
   
   .App-logo {
@@ -46,3 +48,17 @@
       transform: rotate(360deg);
     }
   }
+
+.intro-fade {
+    animation: fade 0.5s;
+}
+
+@keyframes fade {
+  0% {
+      opacity: 0;
+  }
+
+  100% {
+      opacity: 1;
+  }
+}

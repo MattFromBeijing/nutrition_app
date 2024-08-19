@@ -7,7 +7,6 @@ import registerRouter from './routes/registerRouter.js';
 import loginRouter from './routes/loginRouter.js';
 import client from './db.js'
 
-
 const app = express();
 const port = 5000;
 

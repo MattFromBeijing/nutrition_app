@@ -30,6 +30,9 @@ dataRouter.get("/getFullMenu", async (req, res) => {
 dataRouter.get("/getActiveLocations", async (req, res) => {
     try {
         const currentLocations = req.query.locationNames
+        const mealType = req.query.mealType
+
+        // console.log(mealType)
 
         const pipeline = [
             {
@@ -54,6 +57,41 @@ dataRouter.get("/getActiveLocations", async (req, res) => {
         let activeLocations = {};
         for (let i = 0; i < currentLocations.length; i++) {
             let checkActive = checkLocations.includes(currentLocations[i])
+            
+            let menu = null
+                if (checkActive) {
+                    switch (mealType){
+                        case "Breakfast":
+
+                            menu = await new_menu.aggregate([
+                                { $match : {"location" : currentLocations[i]}}, 
+                                { $project : {"_id" : 0, "Breakfast" : 1}}
+                            ]).toArray()
+                            if (menu[0].Breakfast.length == 0) checkActive = false
+                            else checkActive = true
+                            break
+
+                        case "Lunch":
+
+                            menu = await new_menu.aggregate([
+                                { $match : {"location" : currentLocations[i]}}, 
+                                { $project : {"_id" : 0, "Lunch" : 1}}
+                            ]).toArray()
+                            if (menu[0].Lunch.length == 0) checkActive = false
+                            else checkActive = true
+                            break
+
+                        case "Dinner":
+
+                            menu = await new_menu.aggregate([
+                                { $match : {"location" : currentLocations[i]}}, 
+                                { $project : {"_id" : 0, "Dinner" : 1}}
+                            ]).toArray()
+                            if (menu[0].Dinner.length == 0) checkActive = false
+                            else checkActive = true
+                            break
+                    }
+                }
             activeLocations[currentLocations[i]] = checkActive
         }
 
@@ -69,9 +107,47 @@ dataRouter.get("/getActiveLocations", async (req, res) => {
 dataRouter.get("/getLocationMenu", async (req, res) => {
     try {
         const locationName = req.query.locationName;
-        const result = await new_menu.find({ "location" : {$eq : locationName}}).toArray()
+        const mealType = req.query.mealType;
+
+        // console.log(mealType)
+
+        let result = null;
+        switch (mealType){
+            case "Breakfast":
+
+                result = await new_menu.aggregate([
+                    { $match : {"location" : locationName}}, 
+                    { $project : {"_id" : 0, "Breakfast" : 1}}
+                ]).toArray()
+                break
+
+            case "Lunch":
+
+                result = await new_menu.aggregate([
+                    { $match : {"location" : locationName}}, 
+                    { $project : {"_id" : 0, "Lunch" : 1}}
+                ]).toArray()
+                break
+
+            case "Dinner":
+
+                result = await new_menu.aggregate([
+                    { $match : {"location" : locationName}}, 
+                    { $project : {"_id" : 0, "Dinner" : 1}}
+                ]).toArray()
+                break
+            
+            // for development purposes only, comment out in deployment
+            default:
+
+                result = await new_menu.aggregate([
+                    { $match : {"location" : locationName}}, 
+                    { $project : {"_id" : 0, "Lunch" : 1}}
+                ]).toArray()
+                break
+        }
         
-        // console.log(result)
+        console.log(result)
 
         res.send(result[0])
     } catch (e) {
@@ -80,4 +156,4 @@ dataRouter.get("/getLocationMenu", async (req, res) => {
     }
 });
 
-export default dataRouter;
+export default dataRouter
