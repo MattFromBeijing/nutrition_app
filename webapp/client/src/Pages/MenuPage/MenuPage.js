@@ -1,8 +1,10 @@
 import './MenuPage.css'
 import '../App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Spinner } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, memo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios'
 
@@ -35,10 +37,10 @@ function MenuPage() {
 
   const [menu, setMenu] = useState([]);
   const [cart, setCart] = useState({});
+  const [prevCart, setPrevCart] = useState({})
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openIndices, setOpenIndices] = useState([]);
 
   const getEasternTime = () => {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
@@ -47,16 +49,6 @@ function MenuPage() {
   const morning = new Date(getEasternTime().setHours(11, 0, 0, 0));
   const noon = new Date(getEasternTime().setHours(16, 0, 0, 0));
   const evening = new Date(getEasternTime().setHours(23, 59, 59, 999));
-
-  // const handleClick = (index) => {
-  //   setOpenIndices((curr) => {
-  //     if (curr.includes(index)) {
-  //       return curr.filter(i => i !== index);
-  //     } else {
-  //       return [...curr, index];
-  //     }
-  //   });
-  // };
 
   const getLocationMenu = async (locationName) => {
     try {
@@ -73,7 +65,7 @@ function MenuPage() {
         }
       )
 
-      console.log(response.data)
+      // console.log(response.data)
       
       setMenu(Object.values(response.data)[0])
       setLoading(false)
@@ -81,46 +73,6 @@ function MenuPage() {
       setError(e)
       console.error(e)
     }
-  }
-
-  const handleAdd = (index) => {
-
-    let itemName = menu[index].name
-    // console.log(itemName)
-
-    setCart((curr) => {
-      if (curr[itemName]) {
-        // console.log(curr[itemName])  
-        return {
-          ...curr,
-          [itemName]: curr[itemName] + 1
-        };
-      } else {
-        return {
-          ...curr,
-          [itemName]: 1
-        }
-      }
-    });
-  }
-
-  const handleRemove = (index) => {
-
-    let itemName = menu[index].name
-
-    setCart((curr) => {
-      if (curr[itemName] > 1) {
-        return {
-          ...curr,
-          [itemName]: curr[itemName] - 1
-        };
-      } else if (curr[itemName] === 1) {
-        let { [itemName]: _, ...newCart } = curr;
-        return newCart
-      } else {
-        return curr
-      }
-    });
   }
 
   // const getRecMenu = async () => {
@@ -139,22 +91,79 @@ function MenuPage() {
   //   }
   // }
 
+  // console.log('MenuPage re-rendered');
+
   useEffect(() => {
     getLocationMenu(location)
   }, [])
 
-  const ItemCard = ({item, index}) => {
+  const handleAdd = (index) => {
+
+    let itemName = menu[index].name
+    // console.log(itemName)
+
+    setPrevCart(cart)
+
+    setCart((curr) => {
+      if (curr[itemName]) {
+        // console.log(curr[itemName])  
+        return {
+          ...curr,
+          [itemName]: curr[itemName] + 1
+        };
+      } else {
+        return {
+          ...curr,
+          [itemName]: 1
+        }
+      }
+    });
+
+  }
+
+  const handleRemove = (index) => {
+
+    let itemName = menu[index].name
+
+    setPrevCart(cart)
+
+    setCart((curr) => {
+      if (curr[itemName] > 1) {
+        return {
+          ...curr,
+          [itemName]: curr[itemName] - 1
+        };
+      } else if (curr[itemName] === 1) {
+        return {
+          ...curr,
+          [itemName]: 0
+        }
+      } else {
+        return curr
+      }
+    });
+
+  }
+
+  const ItemCard = memo(({ item, index, prevCartCount, cartCount, handleAdd, handleRemove }) => {
+    // console.log(`Rendering ItemCard for ${item.name}`);
     return (
       <div className='item-card'>
         <div className='content-area'>
           <div className='title-area'>
             <p className='name'>{item.name}</p>
             <div className='counter-area'>
-              {
-                cart[item.name] >= 1 ?
-                <div className='counter active'><p className='number'>{cart[item.name]}</p></div> :
+            {
+              cartCount < 1 ? (
                 <div className='counter inactive' />
-              }
+              ) : (
+                prevCartCount === cartCount ? (
+                  <div className='counter active'><p className='number'>{cartCount}</p></div>
+                ) : (
+                  <div className='counter active jump'><p className='number'>{cartCount}</p></div>
+                )
+              )
+            }
             </div>
           </div> 
           <div className='info-area'>
@@ -172,18 +181,17 @@ function MenuPage() {
               <div className='button-area'>
                 <div className='button active' onClick={() => handleAdd(index)}><p className='icon'>+</p></div>
                 {
-                  cart[item.name] >= 1 ? 
+                  cartCount >= 1 ? 
                   <div className='button active' onClick={() => handleRemove(index)}><p className='icon'>-</p></div> :
                   <div className='button inactive'><p className='icon'>-</p></div>
                 }
-                
               </div>
             </div>
           </div>
         </div>
       </div>
     )
-  }
+  });
 
   return (
     <>
@@ -221,10 +229,17 @@ function MenuPage() {
                 <img className='banner' alt="" src={locationImages[link_to_location[location]] || "/penn_state_logo"} />
                 <p className='location-name'>{link_to_location[location]}</p>
                 <div className='menu-content'>
-
                   {
                     menu.map((item, index) => (
-                      <ItemCard key={`item-${index}`} item={item} index={index}/>
+                      <ItemCard 
+                        key={`item-${index}`} 
+                        index={index} 
+                        item={item} 
+                        cartCount={cart[item.name] || 0} 
+                        prevCartCount={prevCart[item.name] || 0} 
+                        handleAdd={handleAdd} 
+                        handleRemove={handleRemove}
+                      />
                     ))
                   }
                 </div>

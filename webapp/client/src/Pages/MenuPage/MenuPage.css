@@ -97,7 +97,7 @@ p.location-name {
             .item-card .content-area .title-area p.name {
                 flex-basis: 85%;
 
-                font-size: 1.5rem;
+                font-size: 1.3rem;
                 line-height: 1.7rem;
                 color: black;
                 margin: 0 0 0 0;
@@ -123,6 +123,19 @@ p.location-name {
                     width: 2.6rem;
                     border-radius: 1.3rem;
                 }
+                
+.jump {
+    animation: jump 0.1s cubic-bezier(0.33, 0, 0.67, 1);
+}
+
+@keyframes jump {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
 
                     .item-card .content-area .title-area .counter-area .counter.active p.number {
                         font-size: 1.2rem;
@@ -135,7 +148,6 @@ p.location-name {
                     height: 2.6rem;
                     width: 2.6rem;
                     border-radius: 1.3rem;
-                    opacity: 0%;
                 }
 
         .item-card .content-area .info-area {
