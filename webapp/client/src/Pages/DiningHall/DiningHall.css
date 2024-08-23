@@ -61,6 +61,9 @@ p.title {
     overflow: hidden;
     width: 27rem;
     height: 13.5rem;
+
+    border-color: rgb(150, 190, 230);
+    border-style: solid;
 }
 
     .hall-card .img-area {

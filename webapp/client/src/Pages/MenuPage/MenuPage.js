@@ -37,7 +37,10 @@ function MenuPage() {
 
   const [menu, setMenu] = useState([]);
   const [cart, setCart] = useState({});
-  const [prevCart, setPrevCart] = useState({})
+  const [prevCart, setPrevCart] = useState({});
+  const [showExpanded, setShowExpanded] = useState(false);
+  const [openedCart, setOpenedCart] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -145,6 +148,48 @@ function MenuPage() {
 
   }
 
+  const handleViewCart = (scrollPos1, scrollPos2) => {
+    const appElement = document.querySelector('.App');
+
+    if (appElement) {
+
+      // console.log(`scrollPos1: ${scrollPos1}`)
+      // console.log(`scrollPos2: ${scrollPos2}`)
+  
+      if (!showExpanded) {
+
+        // Hide the scrollbar while maintaining scroll functionality
+        appElement.style.overflow = 'scroll';
+        appElement.style.scrollbarWidth = 'none';  // For Firefox
+        appElement.style.msOverflowStyle = 'none';  // For Internet Explorer and Edge
+  
+        // For Webkit browsers (Chrome, Safari, etc.)
+        appElement.style.setProperty('::-webkit-scrollbar', 'width: 0px');
+        appElement.style.setProperty('::-webkit-scrollbar-thumb', 'display: none');
+
+        // Restore the scroll position
+        // console.log('open')
+        appElement.scrollTop = scrollPos1;
+      } else {
+        // Revert to visible overflow
+        appElement.style.overflow = 'visible';
+
+        // console.log('close')
+        window.scrollTo({
+          top: scrollPos2,
+          left: 0,
+          behavior: 'instant',
+        });
+      }
+
+    } else {
+      console.log("Element with class 'App' not found.");
+    }
+
+    setShowExpanded(!showExpanded);
+    setOpenedCart(true)
+  }
+
   const ItemCard = memo(({ item, index, prevCartCount, cartCount, handleAdd, handleRemove }) => {
     // console.log(`Rendering ItemCard for ${item.name}`);
     return (
@@ -214,38 +259,81 @@ function MenuPage() {
             </div>
           </div>
         ) : (
-          <>
-            <div className="intro-fade">
+          <div className="intro-fade">
 
-              <div className="logo" onClick={() => navigate('/halls')}>
-                <img alt="" src="/pennState_logo.png" style={{ width: '100px', height: 'auto' }}/>
-                <div className='logo-text'>
-                  <p className="logo-title">PennMeal</p>
-                  <p className='logo-subtitle'>For growing boys and girls</p>
-                </div>
+            <div className="logo" onClick={() => navigate('/halls')}>
+              <img alt="" src="/pennState_logo.png" style={{ width: '100px', height: 'auto' }}/>
+              <div className='logo-text'>
+                <p className="logo-title">PennMeal</p>
+                <p className='logo-subtitle'>For growing boys and girls</p>
               </div>
+            </div>
 
-              <div className="menu-content-wrapper">
-                <img className='banner' alt="" src={locationImages[link_to_location[location]] || "/penn_state_logo"} />
-                <p className='location-name'>{link_to_location[location]}</p>
-                <div className='menu-content'>
-                  {
-                    menu.map((item, index) => (
-                      <ItemCard 
-                        key={`item-${index}`} 
-                        index={index} 
-                        item={item} 
-                        cartCount={cart[item.name] || 0} 
-                        prevCartCount={prevCart[item.name] || 0} 
-                        handleAdd={handleAdd} 
-                        handleRemove={handleRemove}
-                      />
-                    ))
-                  }
+            <div className="menu-content-wrapper">
+              <img className='banner' alt="" src={locationImages[link_to_location[location]] || "/penn_state_logo"} />
+              <p className='location-name'>{link_to_location[location]}</p>
+              <div className='menu-content'>
+                {
+                  menu.map((item, index) => (
+                    <ItemCard 
+                      key={`item-${index}`} 
+                      index={index} 
+                      item={item} 
+                      cartCount={cart[item.name] || 0} 
+                      prevCartCount={prevCart[item.name] || 0} 
+                      handleAdd={handleAdd} 
+                      handleRemove={handleRemove}
+                    />
+                  ))
+                }
+              </div>
+            </div>
+
+            {
+              showExpanded ? (
+                <>
+                  <div className='expanded-shopping-cart grow'>
+                    <div className='cart-area'></div>
+                  </div>
+                </>
+              ) : !showExpanded && openedCart ? (
+                <>
+                  <div className='expanded-shopping-cart shrink'></div>
+                </>
+              ) : (
+                <></>
+              )
+            }
+
+            <div className='view-cart-wrapper'>
+              <div className='view-cart-area'>
+                <div 
+                  className='view-cart' 
+                  onClick={() => {
+                    const scrollPos = window.scrollY;
+                    setScrollPosition(scrollPos);
+                    // console.log(scrollPosition);
+                    handleViewCart(scrollPos, scrollPosition);
+                  }}
+                >
+                  <div className='content-area'>
+                    <div className='text-area'>
+                      <p className='cart'>
+                        {
+                          !showExpanded ? (
+                          `View Cart (${Object.values(cart).reduce((sum, value) => sum + value, 0)})`
+                          ) : (
+                          "View Menu"
+                          )
+                        }
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </>
+
+          </div>
         )
       }
     </>
