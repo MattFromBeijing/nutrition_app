@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import minimize
 
-def bulking(locationMenu, nutReq, init_guess=None):
+def maxProteinCalories(locationMenu, nutReq, init_guess=None):
     """
     locationMenu: location's menu
     nutReq: user's nutrition requirements, 
@@ -19,9 +19,9 @@ def bulking(locationMenu, nutReq, init_guess=None):
     min_calories = nutReq.calories
     max_fat = nutReq.fat
     max_sugar = nutReq.sugar
-    min_carbs = nutReq.carbs
+    max_carbs = nutReq.carbs
     min_protein = nutReq.protein
-    min_fiber = nutReq.fiber
+    # min_fiber = nutReq.fiber
 
     # Bounds for each dish (x)
     # In this case, it's going to be binary as choosing one dish one time will maintain food diversity
@@ -40,11 +40,11 @@ def bulking(locationMenu, nutReq, init_guess=None):
         return max(0, min_protein - np.dot(protein, x)) * protein_penalty_weight
 
     def carb_penalty(x):
-        return max(0, min_carbs - np.dot(carbs, x)) * carbs_penalty_weight
+        return max(0, np.dot(carbs, x) - max_carbs) * carbs_penalty_weight
 
     # Constraint functions
-    def fiberConstraint(x):
-        return np.dot(fiber, x) - min_fiber
+    # def fiberConstraint(x):
+    #     return np.dot(fiber, x) - min_fiber
 
     def fatConstraint(x):
         return max_fat - np.dot(fat, x)
@@ -59,13 +59,13 @@ def bulking(locationMenu, nutReq, init_guess=None):
         return np.dot(protein, x) - min_protein
 
     def carbConstraint(x):
-        return np.dot(carbs, x) - min_carbs
+        return max_carbs - np.dot(carbs, x)
 
     # Combines all of the constraints so it can be passed into the minimize function
     constraints = [
         {'type': 'ineq', 'fun': caloricConstraint},
         {'type': 'ineq', 'fun': proteinConstraint},
-        {'type': 'ineq', 'fun': fiberConstraint},
+        # {'type': 'ineq', 'fun': fiberConstraint},
         {'type': 'ineq', 'fun': fatConstraint},
         {'type': 'ineq', 'fun': sugarConstraint},
         {'type': 'ineq', 'fun': carbConstraint}
@@ -74,7 +74,7 @@ def bulking(locationMenu, nutReq, init_guess=None):
     # Objective Functions
     def initObjective(x): # Maximizes protein, fiber, carbs, and calories
         penalties = protein_penalty(x)
-        macro_minimize = np.dot(fat, x) + np.dot(sugar, x)
+        macro_minimize = np.dot(fat, x) + np.dot(sugar, x) + np.dot(carbs, x)
         return macro_minimize + penalties
 
     # Initial guess (equal distribution)
@@ -87,7 +87,7 @@ def bulking(locationMenu, nutReq, init_guess=None):
 
     def finalObjective(x):
         penalties = protein_penalty(x) + caloric_penalty(x) + carb_penalty(x)
-        macro_maximize = -np.dot(calories, x) - np.dot(protein, x) - np.dot(carbs, x)
+        macro_maximize = -np.dot(calories, x) - np.dot(protein, x)
         return macro_maximize + penalties
 
     # Minimize the negative of protein and fiber

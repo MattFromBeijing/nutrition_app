@@ -13,34 +13,44 @@ function MenuPage() {
   const navigate = useNavigate();
 
   const locationImages = {
+    "Altoona - Port Sky Cafe": "/altoona_port_sky_cafe.png",
     "Behrend - Bruno's": "/behrend_bruno's.png",
     "Harrisburg - Stacks": "/harrisburg_stacks.png",
-    "Harrisburg - The Outpost": "/harrisburg_outpost.png",
-    "Berks - Tully's": "/berks_tully's.png",
-    "Altoona - Port Sky Cafe": "/altoona_port_sky_cafe.png",
-    "Hazleton - HighAcres Cafe": "/hazleton_high_acres.png",
-    "Hazleton - Higher Grounds": "/hazleton_higher_grounds.png",
-    "UP: Pollock Dining Commons": "/UP_pollock_dining_commons.png",
-    "UP: East Food District @ Findlay": "/UP_east_food_district_resized2.png"
+    "Behrend - Dobbins": "/behrend_dobbins.png",
+    "Brandywine - Blue Apple Cafe": "/brandywine_blue_apple_cafe.png",
+    "Mont Alto - The Mill Cafe": "/mont_alto_the_mill_cafe.png",
+    "UP: Pollock Dining Commons": "/up_pollock_dining_commons.png",
+    "Beaver - Brodhead Bistro": "/beaver_brodhead_bistro.png",
+    "UP: West Food District @ Waring": "/up_west_food_district_at_waring.png",
+    "UP: South Food District @ Redifer": "/up_south_food_district_at_redifer.png",
+    "UP: East Food District @ Findlay": "/up_east_food_district_at_findlay.png",
+    "UP: North Food District @ Warnock": "/up_north_food_district_at_warnock.png",
+    "Hazleton - HighAcres Cafe": "/hazleton_highacres_cafe.png",
+    "Berks - Tully's": "/berks_tully's.png"
   }
+
   const link_to_location = {
+    'altoona_port_sky_cafe': 'Altoona - Port Sky Cafe',
     "behrend_brunos": "Behrend - Bruno's",
-    "harrisburg_stacks": "Harrisburg - Stacks",
-    "harrisburg_outpost": "Harrisburg - The Outpost",
-    "berks_tullys": "Berks - Tully's",
-    "altoona_port_sky_cafe": "Altoona - Port Sky Cafe",
-    "hazleton_high_acres": "Hazleton - HighAcres Cafe",
-    "hazleton_higher_grounds": "Hazleton - Higher Grounds",
-    "UP_pollock_dining_commons": "UP: Pollock Dining Commons",
-    "UP_east_food_district": "UP: East Food District @ Findlay"
+    'harrisburg_stacks': 'Harrisburg - Stacks',
+    'behrend_dobbins': 'Behrend - Dobbins',
+    'brandywine_blue_apple_cafe': 'Brandywine - Blue Apple Cafe',
+    'mont_alto_the_mill_cafe': 'Mont Alto - The Mill Cafe',
+    'up_pollock_dining_commons': 'UP: Pollock Dining Commons',
+    'beaver_brodhead_bistro': 'Beaver - Brodhead Bistro',
+    'up_west_food_district_at_waring': 'UP: West Food District @ Waring',
+    'up_south_food_district_at_redifer': 'UP: South Food District @ Redifer',
+    'up_east_food_district_at_findlay': 'UP: East Food District @ Findlay',
+    'up_north_food_district_at_warnock': 'UP: North Food District @ Warnock',
+    'hazleton_highacres_cafe': 'Hazleton - HighAcres Cafe',
+    "berks_tullys": "Berks - Tully's"
   }
 
   const [menu, setMenu] = useState([]);
   const [cart, setCart] = useState({});
-  const [prevCart, setPrevCart] = useState({});
+  const [cartTotal, setCartTotal] = useState({ calories: 0, protein: 0, totalCarb: 0, totalFat: 0, sugars: 0, dietaryFiber: 0 })
   const [showExpanded, setShowExpanded] = useState(false);
   const [openedCart, setOpenedCart] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -105,11 +115,9 @@ function MenuPage() {
     let itemName = menu[index].name
     // console.log(itemName)
 
-    setPrevCart(cart)
-
     setCart((curr) => {
       if (curr[itemName]) {
-        // console.log(curr[itemName])  
+        // console.log(curr[itemName])
         return {
           ...curr,
           [itemName]: curr[itemName] + 1
@@ -127,8 +135,7 @@ function MenuPage() {
   const handleRemove = (index) => {
 
     let itemName = menu[index].name
-
-    setPrevCart(cart)
+    console.log(itemName)
 
     setCart((curr) => {
       if (curr[itemName] > 1) {
@@ -148,49 +155,14 @@ function MenuPage() {
 
   }
 
-  const handleViewCart = (scrollPos1, scrollPos2) => {
-    const appElement = document.querySelector('.App');
+  console.log(cart)
 
-    if (appElement) {
-
-      // console.log(`scrollPos1: ${scrollPos1}`)
-      // console.log(`scrollPos2: ${scrollPos2}`)
-  
-      if (!showExpanded) {
-
-        // Hide the scrollbar while maintaining scroll functionality
-        appElement.style.overflow = 'scroll';
-        appElement.style.scrollbarWidth = 'none';  // For Firefox
-        appElement.style.msOverflowStyle = 'none';  // For Internet Explorer and Edge
-  
-        // For Webkit browsers (Chrome, Safari, etc.)
-        appElement.style.setProperty('::-webkit-scrollbar', 'width: 0px');
-        appElement.style.setProperty('::-webkit-scrollbar-thumb', 'display: none');
-
-        // Restore the scroll position
-        // console.log('open')
-        appElement.scrollTop = scrollPos1;
-      } else {
-        // Revert to visible overflow
-        appElement.style.overflow = 'visible';
-
-        // console.log('close')
-        window.scrollTo({
-          top: scrollPos2,
-          left: 0,
-          behavior: 'instant',
-        });
-      }
-
-    } else {
-      console.log("Element with class 'App' not found.");
-    }
-
+  const handleViewCart = () => {
     setShowExpanded(!showExpanded);
     setOpenedCart(true)
   }
 
-  const ItemCard = memo(({ item, index, prevCartCount, cartCount, handleAdd, handleRemove }) => {
+  const ItemCard = memo(({ item, index, cartCount, handleAdd, handleRemove }) => {
     // console.log(`Rendering ItemCard for ${item.name}`);
     return (
       <div className='item-card'>
@@ -200,28 +172,24 @@ function MenuPage() {
             <div className='counter-area'>
             {
               cartCount < 1 ? (
-                <div className='counter inactive' />
+                  <div className='counter inactive' />
               ) : (
-                prevCartCount === cartCount ? (
                   <div className='counter active'><p className='number'>{cartCount}</p></div>
-                ) : (
-                  <div className='counter active jump'><p className='number'>{cartCount}</p></div>
-                )
               )
             }
             </div>
           </div> 
           <div className='info-area'>
-            <div className='left'>
-              <p>Calories: {item.calories}</p>
-              <p>Protein: {item.protein}</p>
-              <p>Carbs: {item.carbs}</p>
-            </div>
-            <div className='right'>
-              <p>Fat: {item.fat}</p>
-              <p>Sugar: {item.sugars} </p>
-              <p>Fiber: {item.fiber}</p>
-            </div>
+          <div className='left'>
+            <p>Calories: {item.calories}</p>
+            <p>Protein: {item.protein === "n/a" ? "n/a" : item.protein + " g"}</p>
+            <p>Carbs: {item.totalCarb === "n/a" ? "n/a" : item.totalCarb + " g"}</p>
+          </div>
+          <div className='right'>
+            <p>Fat: {item.totalFat === "n/a" ? "n/a" : item.totalFat +" g"}</p>
+            <p>Sugar: {item.sugars === "n/a" ? "n/a" : item.sugars + " g"}</p>
+            <p>Fiber: {item.dietaryFiber === "n/a" ? "n/a" : item.dietaryFiber + " g"}</p>
+          </div>
             <div className='end'>
               <div className='button-area'>
                 <div className='button active' onClick={() => handleAdd(index)}><p className='icon'>+</p></div>
@@ -238,25 +206,43 @@ function MenuPage() {
     )
   });
 
+  const calculateTotal = () => {
+    const cartItems = menu.filter((item => cart[item.name] >= 1))
+
+    let newTotal = { calories: 0, protein: 0, totalCarb: 0, totalFat: 0, sugars: 0, dietaryFiber: 0 }
+
+    for (let i = 0; i < cartItems.length; i++) {
+      newTotal = {
+        calories: cartItems[i].calories * cart[cartItems[i].name],
+        protein: cartItems[i].protein * cart[cartItems[i].name],
+        totalCarb: cartItems[i].totalCarb * cart[cartItems[i].name],
+        totalFat: cartItems[i].totalFat * cart[cartItems[i].name],
+        sugars: cartItems[i].sugars * cart[cartItems[i].name],
+        dietaryFiber: cartItems[i].dietaryFiber * cart[cartItems[i].name],        
+    }
+  }
+
+    // console.log(newTotal)
+
+    setCartTotal(newTotal)
+  }
+
+  useEffect(() => {
+    calculateTotal()
+  },[cart])
+
   return (
     <>
       {
         loading ? (
-          <div className="mobile-box">
-            <div className="flex-center">
-              <p className="fs-5 title" style={{ color: "#FFFFFF", whiteSpace: "pre"}}>
-                Retrieving the menu at <br />
-                {link_to_location[location]}
-              </p>
-              <Spinner className="spinner" style={{ color: "#FFFFFF" }} animation="border" role="status" />
-            </div>
+          <div className="loading-screen">
+            <p>Retrieving the menu at <br /> {link_to_location[location]}</p>
+            <Spinner className="spinner" animation="border" role="status"/>
           </div>
         ) : error ? (
-          <div className="mobile-box">
-            <div className="flex-center">
-              <p className="fs-5 title text-danger">Error retrieving menu: {error}</p>
-              <p className="fs-5 title text-danger">Please try reloading</p>
-            </div>
+          <div className="loading-screen">
+            <p style={{color: "red"}}>Error retrieving menu: {error}</p>
+            <p>Please try reloading</p>
           </div>
         ) : (
           <div className="intro-fade">
@@ -280,7 +266,6 @@ function MenuPage() {
                       index={index} 
                       item={item} 
                       cartCount={cart[item.name] || 0} 
-                      prevCartCount={prevCart[item.name] || 0} 
                       handleAdd={handleAdd} 
                       handleRemove={handleRemove}
                     />
@@ -290,15 +275,45 @@ function MenuPage() {
             </div>
 
             {
-              showExpanded ? (
+              openedCart ? (
                 <>
-                  <div className='expanded-shopping-cart grow'>
-                    <div className='cart-area'></div>
+                  <div className={showExpanded ? 'black-background fade-in' : 'black-background fade-out'}/>
+
+                  <div className={showExpanded ? 'expanded-shopping-cart grow' : 'expanded-shopping-cart shrink'}>
+                    <div className='cart-area'>
+                      <div className='selected-dishes-area' style={{ overflowY:"scroll" }}>
+                        {
+                          menu.map((item, originalIndex) => ({ ...item, originalIndex }))
+                            .filter(item => cart[item.name] >= 1)
+                            .map((item) => (
+                              <ItemCard
+                                key={`item-${item.originalIndex}`} 
+                                index={item.originalIndex} // Use the original index
+                                item={item} 
+                                cartCount={cart[item.name] || 0} 
+                                handleAdd={handleAdd} 
+                                handleRemove={handleRemove}
+                              />
+                          ))
+                        }
+                      </div>
+                      <div className='total-nutrients-area'>
+                        <div className='title-area'>
+                          <p className='title'>
+                            Total <br /> Nutrients
+                          </p>
+                        </div>
+                        <div className='info-area'>
+                          <p className='nutrient-info'>Calories: {cartTotal.calories}</p>
+                          <p className='nutrient-info'>Protein: {cartTotal.protein} g</p>
+                          <p className='nutrient-info'>Carbs: {cartTotal.totalCarb} g</p>
+                          <p className='nutrient-info'>Fat: {cartTotal.totalFat} g</p>
+                          <p className='nutrient-info'>Sugar: {cartTotal.sugars} g</p>
+                          <p className='nutrient-info'>Fiber: {cartTotal.dietaryFiber} g</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </>
-              ) : !showExpanded && openedCart ? (
-                <>
-                  <div className='expanded-shopping-cart shrink'></div>
                 </>
               ) : (
                 <></>
@@ -310,10 +325,7 @@ function MenuPage() {
                 <div 
                   className='view-cart' 
                   onClick={() => {
-                    const scrollPos = window.scrollY;
-                    setScrollPosition(scrollPos);
-                    // console.log(scrollPosition);
-                    handleViewCart(scrollPos, scrollPosition);
+                    handleViewCart();
                   }}
                 >
                   <div className='content-area'>

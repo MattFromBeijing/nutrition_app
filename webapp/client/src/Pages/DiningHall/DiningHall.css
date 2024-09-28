@@ -82,10 +82,12 @@ p.title {
     }
 
         .hall-card .text-area p.location {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: black;
             height: 2.3em;
             margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
         }
 
     .hall-card.active {

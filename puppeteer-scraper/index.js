@@ -19,23 +19,32 @@ const scrapeMenus = async () => {
     const collection = client.db("test1").collection("new_menu");
 
     // Prepare the data for insertion
-    const documents = [];
-    for (const location in fullMenu) {
-      for (const time in fullMenu[location]) {
-        fullMenu[location][time].forEach(item => {
-          documents.push({
-            location,
-            time,
-            ...item
-          });
-        });
-      }
+    // const documents = []
+    // for (let location in fullMenu) {
+    //   documents.push({
+    //     location: fullMenu[location]
+    //   });
+    // }
+    
+    let documents = []
+    let locations = Object.keys(fullMenu)
+    for (let i = 0; i < locations.length; i++) {
+      documents.push({
+        location: locations[i],
+        Breakfast: fullMenu[locations[i]].Breakfast,
+        Lunch: fullMenu[locations[i]].Lunch,
+        Dinner: fullMenu[locations[i]].Dinner,
+        LateNight: fullMenu[locations[i]].LateNight
+      })
     }
+
+    console.log(documents)
 
     // Check if there are documents to insert
     if (documents.length > 0) {
+      await collection.deleteMany({});
       await collection.insertMany(documents);
-      console.log("Documents inserted.");
+      console.log(`${documents.length} documents inserted`);
     } else {
       console.log("No documents to insert.");
     }
@@ -46,51 +55,6 @@ const scrapeMenus = async () => {
     await client.close();
     console.log("MongoDB client closed.");
   }
-
-  console.log('Hi');
 }
 
 await scrapeMenus();
-
-
-
-/*
-const scrapeMenus = async () => {
-  const links = await getWebPages();
-  console.log('Linked collected:', links);
-
-  const fullMenu = await getMenuItems(links);
-  console.log('Full menu collected:', fullMenu)
-
-  try {
-    await client.connect();
-    console.log('Connected to MongobD')
-    const collection = client.db("test1").collection("new_menu");
-    await collection.insertMany(fullMenu);
-    await client.close()
-    console.log("Documents Inserted.")
-  } catch (error) {
-    console.log(error)
-  }
-
-  console.log('Hi');
-}
-  */
-
-await scrapeMenus();
-
-/* 
-  if (webPages.length === 0) return todayMenus;
-
-  for (let i = 0; i < webPages.length; i++){
-    try {
-      const locationMenu = await getMenuItems(webPages[i].location, webPages[i].link);
-
-      //append onto existing list
-      todayMenus.push(locationMenu);
-
-    } catch (error) {
-      console.error(error)
-    }
-  }
-*/

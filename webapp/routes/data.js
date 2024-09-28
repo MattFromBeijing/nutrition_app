@@ -137,17 +137,17 @@ dataRouter.get("/getLocationMenu", async (req, res) => {
                 ]).toArray()
                 break
             
-            // for development purposes only, comment out in deployment
-            default:
+            // // for development purposes only, comment out in deployment
+            // default:
 
-                result = await new_menu.aggregate([
-                    { $match : {"location" : locationName}}, 
-                    { $project : {"_id" : 0, "Lunch" : 1}}
-                ]).toArray()
-                break
+            //     result = await new_menu.aggregate([
+            //         { $match : {"location" : locationName}}, 
+            //         { $project : {"_id" : 0, "Lunch" : 1}}
+            //     ]).toArray()
+            //     break
         }
         
-        console.log(result)
+        // console.log(result)
 
         res.send(result[0])
     } catch (e) {

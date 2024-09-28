@@ -69,6 +69,9 @@ p.location-name {
 
     border-color: rgb(150, 190, 230);
     border-style: solid;
+    flex-shrink: 0;
+
+    text-align: start;
 }
     .item-card .content-area {
         width: 90%;
@@ -85,7 +88,7 @@ p.location-name {
             display: flex;
             flex-direction: row;
 
-            height: 3.5rem;
+            max-height: 3.5rem;
             width: 100%;
             margin: 0.5rem 0 0.5rem 0;
         }
@@ -94,7 +97,7 @@ p.location-name {
                 flex-basis: 85%;
 
                 font-size: 1.3rem;
-                line-height: 1.7rem;
+                line-height: 1.5rem;
                 color: black;
                 margin: 0 0 0 0;
             }
@@ -121,7 +124,7 @@ p.location-name {
                 }
                 
 .jump {
-    animation: jump 0.1s cubic-bezier(0.33, 0, 0.67, 1);
+    animation: jump 0.1s ease-in-out;
 }
 
 @keyframes jump {
@@ -280,6 +283,7 @@ p.location-name {
     width: 40rem;
     background-color: white;
     border-radius: 1.6rem;
+
     overflow: hidden;
     box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.6);
     border-color: rgb(150, 190, 230);
@@ -317,57 +321,95 @@ p.location-name {
             }
 
 .grow {
-    animation: grow 0.4s linear forwards;
+    animation: grow 0.4s ease forwards;
 }
 
 @keyframes grow {
-    0% {
-        height: 6rem;
-        width: 6rem;
-        border-radius: 50%; /* Circle */
-        bottom: 1rem;
+    /* 0% {
+        height: 0vh;
+        width: 100vw;
+        bottom: 0rem;
     }
-    50% {
-        height: 50vh;
-        width: 50vw;
-        border-radius: 25vw; /* Still a circle based on width */
-        bottom: 0.5rem;
-    }
+
     100% {
         height: 100vh;
         width: 100vw;
-        border-radius: 0rem; /* No border-radius when full screen */
         bottom: 0rem;
+    } */
+    
+    0% {
+        top: 100vh;
+    }
+    100% {
+        top: 0;
     }
 }
 
 .shrink {
-    animation: shrink 0.4s linear forwards;
+    animation: shrink 0.4s ease forwards;
 }
 
 @keyframes shrink {
-    0% {
+    /* 0% {
         height: 100vh;
         width: 100vw;
-        border-radius: 0rem; /* Full rectangle */
         bottom: 0rem;
     }
-    50% {
-        height: 50vh;
-        width: 50vw;
-        border-radius: 25vw; /* Gradually turning into a circle */
-        bottom: 0.5rem;
+    100% {
+        height: 0vh;
+        width: 100vw;
+        bottom: 0rem;
+    } */
+
+    0% {
+        top: 0;
     }
     100% {
-        height: 6rem;
-        width: 6rem;
-        border-radius: 50%; /* Fully circular */
-        bottom: 1rem;
+        top: 100vh;
     }
 }
 
+.fade-in {
+    animation: fade-in 0.4s ease forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0%;
+    }
+  
+    100% {
+        opacity: 60%;
+    }
+}
+
+.fade-out {
+    animation: fade-out 0.4s ease forwards;
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 60%;
+        pointer-events: none
+    }
+  
+    100% {
+        opacity: 0%;
+        pointer-events: none
+    }
+}
+
+.black-background {
+    background-color: black;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    top: 0rem;
+    left: 0rem;
+}
+
 .expanded-shopping-cart {
-    background-color: white;
+    /* background-color: white; */
 
     position: fixed;
     left: 50%;
@@ -377,12 +419,82 @@ p.location-name {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    height: 100%;
+    width: 100%;
 }
 
     .expanded-shopping-cart .cart-area {
-        height: 100%;
-        width: 60vw;
-        
         /* border-color: black;
         border-style: solid; */
+        background-color: white;
+
+        display: flex;
+        flex-direction: row;
+
+        border-radius: 1.6rem;
+        border-color: rgb(150, 190, 230);
+        border-style: solid solid solid solid;
+        height: 82%;
+        width: 60vw;
+        margin: 1rem 0 0 0;
     }
+
+        .expanded-shopping-cart .cart-area .selected-dishes-area {
+            flex-basis: 60%;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            padding: 1rem;
+            gap: 1rem;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .expanded-shopping-cart .cart-area .total-nutrients-area {
+             flex-basis: 40%;
+
+             display: flex;
+             flex-direction: column;
+
+             border-style: none none none solid;
+             border-color: rgb(150, 190, 230);
+             padding: 1rem;
+        }
+
+            .expanded-shopping-cart .cart-area .total-nutrients-area .title-area {
+                flex-basis: 20%;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+
+                .expanded-shopping-cart .cart-area .total-nutrients-area .title-area p.title {
+                    font-size: 4rem;
+                    line-height: 4rem;
+                    color: black;
+                    margin: 0 0 0 0;
+                    text-align: center;
+                }
+
+            .expanded-shopping-cart .cart-area .total-nutrients-area .info-area {
+                flex-basis: 75%;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                height: 100%;
+                gap: 2rem;
+            }
+
+                .expanded-shopping-cart .cart-area .total-nutrients-area .info-area p.nutrient-info {
+                    font-size: 1.5rem;
+                    color: black;
+                    margin: 0 0 0 0;
+                    text-align: start;
+                }

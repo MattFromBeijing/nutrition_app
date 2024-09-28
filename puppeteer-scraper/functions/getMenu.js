@@ -4,6 +4,8 @@ import puppeteer from 'puppeteer';
 // Sort by location, 
 // DELETE ALL THE CONSOLE LOGS WHEN DONE TESTING THIS PROGRAM CUZ IT SLOWS IT DOWN
 
+// function no longer in use
+
 export const getMenu = async () => {
     try {
         const browser = await puppeteer.launch({

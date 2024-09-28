@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from functions.bulking import bulking
+from functions.baseNutrReqr import baseNutrReqr
 
 routes = Blueprint('routes', __name__)
 
@@ -19,7 +20,7 @@ def determine_weighting(meals):
         case ["Lunch", "Dinner"]: return [0, 0.6, 0.4]
         case _: return None
 
-@routes.route('/getRecMenu', methods=['GET','POST'])
+@routes.route('api/meal', methods=['GET','POST'])
 def getRecMenu():
     if request.method == 'GET':
 
@@ -30,13 +31,12 @@ def getRecMenu():
         userData = request.args.get('userData')
         selectedMeals = request.args.get('selectedMeals')
 
-        # either our own function or an api call from external website to get nutReq
-        # nutReq = function(userData, dietType)
-            
+        nutReqr = baseNutrReqr(userData[0], userData[1], userData[2], userData[3], userData[4])
+
         weighting = determine_weighting(selectedMeals)
-        breakfastPortion = [weighting[0] * i for i in nutReq]
-        lunchPortion = [weighting[1] * i for i in nutReq]
-        dinnerPortion = [weighting[2] * i for i in nutReq]
+        breakfastPortion = [weighting[0] * i for i in nutReqr]
+        lunchPortion = [weighting[1] * i for i in nutReqr]
+        dinnerPortion = [weighting[2] * i for i in nutReqr]
         
         init_guess = []
         fullMenu = []
@@ -56,7 +56,7 @@ def getRecMenu():
                     init_guess += bulking(locationMenu.Dinner, dinnerPortion)
                     fullMenu += locationMenu.Dinner
                 
-                finalOpt = bulking(fullMenu, nutReq, init_guess)
+                finalOpt = bulking(fullMenu, nutReqr, init_guess)
             
             case _:
                 return jsonify(response)
@@ -68,7 +68,7 @@ def getRecMenu():
                 elif item[1] in locationMenu.Lunch and weighting[1] != 0:
                     response["Lunch"] += item
                 elif item[1] in locationMenu.Dinner and weighting[2] != 0:
-                    response["Dinner"] += item
+                    response["Dinner"] += item 
                 else:
                     response["error"] += item
     

@@ -12,31 +12,54 @@ function DiningHall() {
   const [error, setError] = useState(null);
 
   const locationNames = [
-    "Behrend - Bruno's", "Harrisburg - Stacks", "Harrisburg - The Outpost", "Berks - Tully's", "Altoona - Port Sky Cafe",
-    "Hazleton - HighAcres Cafe", "Hazleton - Higher Grounds", "UP: Pollock Dining Commons", "UP: East Food District @ Findlay"
+    "Altoona - Port Sky Cafe",
+    "Behrend - Bruno's",
+    "Harrisburg - Stacks",
+    "Behrend - Dobbins",
+    "Brandywine - Blue Apple Cafe",
+    "Mont Alto - The Mill Cafe",
+    "UP: Pollock Dining Commons",
+    "Beaver - Brodhead Bistro",
+    "UP: West Food District @ Waring",
+    "UP: South Food District @ Redifer",
+    "UP: East Food District @ Findlay",
+    "UP: North Food District @ Warnock",
+    "Hazleton - HighAcres Cafe",
+    "Berks - Tully's"
   ]
   const locationImages = {
+    "Altoona - Port Sky Cafe": "/altoona_port_sky_cafe.png",
     "Behrend - Bruno's": "/behrend_bruno's.png",
     "Harrisburg - Stacks": "/harrisburg_stacks.png",
-    "Harrisburg - The Outpost": "/harrisburg_outpost.png",
-    "Berks - Tully's": "/berks_tully's.png",
-    "Altoona - Port Sky Cafe": "/altoona_port_sky_cafe.png",
-    "Hazleton - HighAcres Cafe": "/hazleton_high_acres.png",
-    "Hazleton - Higher Grounds": "/hazleton_higher_grounds.png",
-    "UP: Pollock Dining Commons": "/UP_pollock_dining_commons.png",
-    "UP: East Food District @ Findlay": "/UP_east_food_district_resized2.png"
+    "Behrend - Dobbins": "/behrend_dobbins.png",
+    "Brandywine - Blue Apple Cafe": "/brandywine_blue_apple_cafe.png",
+    "Mont Alto - The Mill Cafe": "/mont_alto_the_mill_cafe.png",
+    "UP: Pollock Dining Commons": "/up_pollock_dining_commons.png",
+    "Beaver - Brodhead Bistro": "/beaver_brodhead_bistro.png",
+    "UP: West Food District @ Waring": "/up_west_food_district_at_waring.png",
+    "UP: South Food District @ Redifer": "/up_south_food_district_at_redifer.png",
+    "UP: East Food District @ Findlay": "/up_east_food_district_at_findlay.png",
+    "UP: North Food District @ Warnock": "/up_north_food_district_at_warnock.png",
+    "Hazleton - HighAcres Cafe": "/hazleton_highacres_cafe.png",
+    "Berks - Tully's": "/berks_tully's.png"
   }
   const location_to_link = {
+    "Altoona - Port Sky Cafe": "altoona_port_sky_cafe",
     "Behrend - Bruno's": "behrend_brunos",
     "Harrisburg - Stacks": "harrisburg_stacks",
-    "Harrisburg - The Outpost": "harrisburg_outpost",
-    "Berks - Tully's": "berks_tullys",
-    "Altoona - Port Sky Cafe": "altoona_port_sky_cafe",
-    "Hazleton - HighAcres Cafe": "hazleton_high_acres",
-    "Hazleton - Higher Grounds": "hazleton_higher_grounds",
-    "UP: Pollock Dining Commons": "UP_pollock_dining_commons",
-    "UP: East Food District @ Findlay": "UP_east_food_district"
+    "Behrend - Dobbins": "behrend_dobbins",
+    "Brandywine - Blue Apple Cafe": "brandywine_blue_apple_cafe",
+    "Mont Alto - The Mill Cafe": "mont_alto_the_mill_cafe",
+    "UP: Pollock Dining Commons": "up_pollock_dining_commons",
+    "Beaver - Brodhead Bistro": "beaver_brodhead_bistro",
+    "UP: West Food District @ Waring": "up_west_food_district_at_waring",
+    "UP: South Food District @ Redifer": "up_south_food_district_at_redifer",
+    "UP: East Food District @ Findlay": "up_east_food_district_at_findlay",
+    "UP: North Food District @ Warnock": "up_north_food_district_at_warnock",
+    "Hazleton - HighAcres Cafe": "hazleton_highacres_cafe",
+    "Berks - Tully's": "berks_tullys"
   }
+
   const navigate = useNavigate();
   const [activeLocations, setActiveLocations] = useState([])
   const [previewMenu, setPreviewMenu] = useState([])
@@ -128,18 +151,14 @@ function DiningHall() {
     <>
       {
         loading ? (
-          <div className="mobile-box">
-            <div className="flex-center">
-              <p className="fs-5 title" style={{ color: "#FFFFFF" }} >Retrieving today's menus</p>
-              <Spinner className="spinner" style={{ color: "#FFFFFF" }} animation="border" role="status" />
-            </div>
+          <div className="loading-screen">
+            <p>Retrieving today's menus</p>
+            <Spinner className="spinner" animation="border" role="status" />
           </div>
         ) : error ? (
-          <div className="mobile-box">
-            <div className="flex-center">
-              <p className="fs-5 title text-danger">Error retrieving menu: {error}</p>
-              <p className="fs-5 title text-danger">Please try reloading</p>
-            </div>
+          <div className="loading-screen">
+            <p style={{color: "red"}}>Error retrieving menu: {error}</p>
+            <p>Please try reloading</p>
           </div>
         ) : (
           <div className='intro-fade'>
