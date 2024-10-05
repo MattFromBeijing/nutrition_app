@@ -3,17 +3,17 @@ from scipy.optimize import minimize
 
 def maxProteinCalories(locationMenu, nutReq, init_guess=None):
     """
-    locationMenu: location's menu
-    nutReq: user's nutrition requirements, 
+    locationMenu: dict with arrays representing location's menu
+    nutReq: dict representing user's nutrition requirements, 
     """
     
     dishes = [item.name for item in locationMenu]
-    calories = [item.Calories for item in locationMenu]
-    protein = [item.Protein for item in locationMenu]
-    fiber = [item.Fiber for item in locationMenu]
-    fat = [item.Fat for item in locationMenu]
-    sugar = [item.Sugars for item in locationMenu]
-    carbs = [item.Carbs for item in locationMenu]
+    calories = [item.calories for item in locationMenu]
+    protein = [item.protein for item in locationMenu]
+    fiber = [item.dietaryFiber for item in locationMenu]
+    fat = [item.totalFat for item in locationMenu]
+    sugar = [item.sugars for item in locationMenu]
+    carbs = [item.totalCarb for item in locationMenu]
 
     # Set daily constraints here:
     min_calories = nutReq.calories
@@ -21,7 +21,7 @@ def maxProteinCalories(locationMenu, nutReq, init_guess=None):
     max_sugar = nutReq.sugar
     max_carbs = nutReq.carbs
     min_protein = nutReq.protein
-    # min_fiber = nutReq.fiber
+    min_fiber = nutReq.fiber
 
     # Bounds for each dish (x)
     # In this case, it's going to be binary as choosing one dish one time will maintain food diversity
@@ -43,8 +43,8 @@ def maxProteinCalories(locationMenu, nutReq, init_guess=None):
         return max(0, np.dot(carbs, x) - max_carbs) * carbs_penalty_weight
 
     # Constraint functions
-    # def fiberConstraint(x):
-    #     return np.dot(fiber, x) - min_fiber
+    def fiberConstraint(x):
+        return np.dot(fiber, x) - min_fiber
 
     def fatConstraint(x):
         return max_fat - np.dot(fat, x)
@@ -65,7 +65,7 @@ def maxProteinCalories(locationMenu, nutReq, init_guess=None):
     constraints = [
         {'type': 'ineq', 'fun': caloricConstraint},
         {'type': 'ineq', 'fun': proteinConstraint},
-        # {'type': 'ineq', 'fun': fiberConstraint},
+        {'type': 'ineq', 'fun': fiberConstraint},
         {'type': 'ineq', 'fun': fatConstraint},
         {'type': 'ineq', 'fun': sugarConstraint},
         {'type': 'ineq', 'fun': carbConstraint}
@@ -87,7 +87,7 @@ def maxProteinCalories(locationMenu, nutReq, init_guess=None):
 
     def finalObjective(x):
         penalties = protein_penalty(x) + caloric_penalty(x) + carb_penalty(x)
-        macro_maximize = -np.dot(calories, x) - np.dot(protein, x)
+        macro_maximize = -np.dot(calories, x) - np.dot(protein, x) - np.dot(fiber, x)
         return macro_maximize + penalties
 
     # Minimize the negative of protein and fiber

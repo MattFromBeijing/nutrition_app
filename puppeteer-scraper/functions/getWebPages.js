@@ -71,11 +71,23 @@ export const getWebPages = async () => {
                 const nutritionalLinks = await page.evaluate(() => {
                     return Array.from(document.querySelectorAll('a'))
                         .filter(link => link.textContent.includes('Nutrition') || link.href.includes('nutrition'))
-                        .map(link => ({
-                            href: link.href,
-                            text: link.innerText
-                        }));
+                        .map((link) => {
+                            // Find the closest previous sibling category header (h2)
+                            let categoryHeader = link.closest('div.menu-items')
+                            console.log(categoryHeader)
+                            while (!categoryHeader.matches("h2.category-header")){
+                                console.log(categoryHeader)
+                                categoryHeader = categoryHeader.previousElementSibling
+                            }
+                            
+                            return {
+                                href: link.href,
+                                text: link.innerText,
+                                category: categoryHeader ? categoryHeader.innerText : null // Get category header text
+                            };
+                        });
                 });
+                
 
                 // console.log(`Successfully scraped for ${time} at ${location.name}`);
 
@@ -85,6 +97,7 @@ export const getWebPages = async () => {
                     links.push({
                         href: link.href,
                         text: link.text,
+                        category: link.category,
                         location: location.name,
                         time: mealTime
                     });

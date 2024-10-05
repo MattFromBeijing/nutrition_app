@@ -47,6 +47,7 @@ function MenuPage() {
   }
 
   const [menu, setMenu] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [cart, setCart] = useState({});
   const [cartTotal, setCartTotal] = useState({ calories: 0, protein: 0, totalCarb: 0, totalFat: 0, sugars: 0, dietaryFiber: 0 })
   const [showExpanded, setShowExpanded] = useState(false);
@@ -79,8 +80,12 @@ function MenuPage() {
       )
 
       // console.log(response.data)
+
+      let menuData = Object.values(response.data)[0]
+      let categoriesData = Object.keys(menuData)
       
-      setMenu(Object.values(response.data)[0])
+      setMenu(menuData)
+      setCategories(categoriesData)
       setLoading(false)
     } catch (e) {
       setError(e)
@@ -88,21 +93,26 @@ function MenuPage() {
     }
   }
 
-  // const getRecMenu = async () => {
-  //   try {
-  //     const response = await axios.get('http://localhost:8000/getRecMenu',
-  //       {
-  //         params: {locationMenu: menu, dietType: {}, userData: {}}, // not complete, missing dietType and userData
-  //         headers: {'Content-Type': 'application/json'},
-  //         withCredentials: true
-  //       }
-  //     )
-  //     console.log(response)
-  //   } catch (e) {
-  //     setError(e)
-  //     console.error(e)
-  //   }
-  // }
+  const getRecMenu = async () => {
+    try {
+      let meal = ""
+      if (time <= morning) meal = "Breakfast"
+      else if (time > morning && time <= noon) meal = "Lunch"
+      else if (time > noon && time <= evening) meal = "Dinner"
+
+      const response = await axios.get('http://localhost:8000/api/recMenu',
+        {
+          params: {locationMenu: JSON.stringify(menu), mealTime: meal}, // not complete, missing dietType and userData
+          headers: {'Content-Type': 'application/json'},
+          withCredentials: true
+        }
+      )
+      // console.log(response)
+    } catch (e) {
+      setError(e)
+      console.error(e)
+    }
+  }
 
   // console.log('MenuPage re-rendered');
 
@@ -110,9 +120,10 @@ function MenuPage() {
     getLocationMenu(location)
   }, [])
 
-  const handleAdd = (index) => {
+  const handleAdd = (index, itemCategory) => {
+    console.log(index)
 
-    let itemName = menu[index].name
+    let itemName = menu[itemCategory][index].name
     // console.log(itemName)
 
     setCart((curr) => {
@@ -132,10 +143,10 @@ function MenuPage() {
 
   }
 
-  const handleRemove = (index) => {
+  const handleRemove = (index, itemCategory) => {
 
-    let itemName = menu[index].name
-    console.log(itemName)
+    let itemName = menu[itemCategory][index].name
+    // console.log(itemName)
 
     setCart((curr) => {
       if (curr[itemName] > 1) {
@@ -155,7 +166,7 @@ function MenuPage() {
 
   }
 
-  console.log(cart)
+  // console.log(cart)
 
   const handleViewCart = () => {
     setShowExpanded(!showExpanded);
@@ -192,10 +203,10 @@ function MenuPage() {
           </div>
             <div className='end'>
               <div className='button-area'>
-                <div className='button active' onClick={() => handleAdd(index)}><p className='icon'>+</p></div>
+                <div className='button active' onClick={() => handleAdd(index, item.category)}><p className='icon'>+</p></div>
                 {
                   cartCount >= 1 ? 
-                  <div className='button active' onClick={() => handleRemove(index)}><p className='icon'>-</p></div> :
+                  <div className='button active' onClick={() => handleRemove(index, item.category)}><p className='icon'>-</p></div> :
                   <div className='button inactive'><p className='icon'>-</p></div>
                 }
               </div>
@@ -207,29 +218,52 @@ function MenuPage() {
   });
 
   const calculateTotal = () => {
-    const cartItems = menu.filter((item => cart[item.name] >= 1))
-
-    let newTotal = { calories: 0, protein: 0, totalCarb: 0, totalFat: 0, sugars: 0, dietaryFiber: 0 }
-
+    // Flatten the menu object into an array of all items
+    const allItems = Object.values(menu).flat();
+  
+    // Filter the items that are in the cart
+    const cartItems = allItems.filter(item => cart[item.name] >= 1);
+  
+    // Initialize the total nutrients
+    let newTotal = {
+      calories: 0,
+      protein: 0,
+      totalCarb: 0,
+      totalFat: 0,
+      sugars: 0,
+      dietaryFiber: 0
+    };
+  
+    // Accumulate the nutrients
     for (let i = 0; i < cartItems.length; i++) {
-      newTotal = {
-        calories: cartItems[i].calories * cart[cartItems[i].name],
-        protein: cartItems[i].protein * cart[cartItems[i].name],
-        totalCarb: cartItems[i].totalCarb * cart[cartItems[i].name],
-        totalFat: cartItems[i].totalFat * cart[cartItems[i].name],
-        sugars: cartItems[i].sugars * cart[cartItems[i].name],
-        dietaryFiber: cartItems[i].dietaryFiber * cart[cartItems[i].name],        
+      const item = cartItems[i];
+      const count = cart[item.name];
+  
+      // Parse nutrient values and handle 'n/a' or undefined
+      const calories = parseFloat(item.calories) || 0;
+      const protein = parseFloat(item.protein) || 0;
+      const totalCarb = parseFloat(item.totalCarb) || 0;
+      const totalFat = parseFloat(item.totalFat) || 0;
+      const sugars = parseFloat(item.sugars) || 0;
+      const dietaryFiber = parseFloat(item.dietaryFiber) || 0;
+  
+      newTotal.calories += calories * count;
+      newTotal.protein += protein * count;
+      newTotal.totalCarb += totalCarb * count;
+      newTotal.totalFat += totalFat * count;
+      newTotal.sugars += sugars * count;
+      newTotal.dietaryFiber += dietaryFiber * count;
     }
-  }
-
-    // console.log(newTotal)
-
-    setCartTotal(newTotal)
-  }
-
+  
+    // Update the cart total state
+    setCartTotal(newTotal);
+  };
+  
   useEffect(() => {
     calculateTotal()
   },[cart])
+
+  // getRecMenu()
 
   return (
     <>
@@ -241,7 +275,7 @@ function MenuPage() {
           </div>
         ) : error ? (
           <div className="loading-screen">
-            <p style={{color: "red"}}>Error retrieving menu: {error}</p>
+            <p>An error occurred ;(</p>
             <p>Please try reloading</p>
           </div>
         ) : (
@@ -259,18 +293,33 @@ function MenuPage() {
               <img className='banner' alt="" src={locationImages[link_to_location[location]] || "/penn_state_logo"} />
               <p className='location-name'>{link_to_location[location]}</p>
               <div className='menu-content'>
-                {
-                  menu.map((item, index) => (
-                    <ItemCard 
-                      key={`item-${index}`} 
-                      index={index} 
-                      item={item} 
-                      cartCount={cart[item.name] || 0} 
-                      handleAdd={handleAdd} 
-                      handleRemove={handleRemove}
-                    />
-                  ))
-                }
+              {
+                categories.map((element) => {
+                  return (
+                    <div className='category-section'>
+                      <div className='category-title-area'>
+                        <p className='category-title'>
+                          {element}
+                        </p>
+                      </div>
+                      <div className='category-content-area'>
+                        {
+                          menu[element].map((item, index) => (
+                            <ItemCard
+                              key={`item-${index}`} 
+                              index={index} 
+                              item={item}
+                              cartCount={cart[item.name] || 0} 
+                              handleAdd={handleAdd} 
+                              handleRemove={handleRemove}
+                            />
+                          ))
+                        }                      
+                      </div>
+                    </div>
+                  )
+                })
+              }
               </div>
             </div>
 
@@ -281,21 +330,24 @@ function MenuPage() {
 
                   <div className={showExpanded ? 'expanded-shopping-cart grow' : 'expanded-shopping-cart shrink'}>
                     <div className='cart-area'>
-                      <div className='selected-dishes-area' style={{ overflowY:"scroll" }}>
-                        {
-                          menu.map((item, originalIndex) => ({ ...item, originalIndex }))
+                      <div className='selected-dishes-area'>
+                      {
+                        categories.map((element) => 
+                          menu[element]
+                            .map((item, originalIndex) => ({...item, originalIndex}))
                             .filter(item => cart[item.name] >= 1)
                             .map((item) => (
-                              <ItemCard
-                                key={`item-${item.originalIndex}`} 
-                                index={item.originalIndex} // Use the original index
+                              <ItemCard 
+                                key={`item-${element}-${item.originalIndex}`} 
+                                index={item.originalIndex} 
                                 item={item} 
-                                cartCount={cart[item.name] || 0} 
-                                handleAdd={handleAdd} 
+                                cartCount={cart[item.name]} 
+                                handleAdd={handleAdd}
                                 handleRemove={handleRemove}
                               />
-                          ))
-                        }
+                            ))
+                        )
+                      }
                       </div>
                       <div className='total-nutrients-area'>
                         <div className='title-area'>

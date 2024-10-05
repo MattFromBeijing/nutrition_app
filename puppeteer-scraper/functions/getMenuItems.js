@@ -48,29 +48,49 @@ export const getMenuItems = async (links) => {
             // Initialize the location and time objects in fullMenu if they don't exist
             if (!fullMenu[link.location]) {
               fullMenu[link.location] = {
-                Breakfast: [],
-                Lunch: [],
-                Dinner: [],
-                LateNight: []
+                Breakfast: {},
+                Lunch: {},
+                Dinner: {},
+                LateNight: {}
               };
             }
 
             // Add the scraped nutritional facts to the corresponding location and time
-            fullMenu[link.location][link.time].push({
-              name: link.text,
-              href: link.href,
-              servingSize: nutritionFacts["Serving Size"],
-              calories: nutritionFacts["Calories"],
-              totalFat: nutritionFacts["Total Fat"],
-              satFat: nutritionFacts["Sat Fat"],
-              transFat: nutritionFacts["Trans Fat"],
-              cholesterol: nutritionFacts["Cholesterol"],
-              sodium: nutritionFacts["Sodium"],
-              totalCarb: nutritionFacts["Total Carb"],
-              dietaryFiber: nutritionFacts["Dietary Fiber"],
-              sugars: nutritionFacts["Sugars"],
-              protein: nutritionFacts["Protein"]
-            });
+            if (fullMenu[link.location][link.time][link.category]){
+              fullMenu[link.location][link.time][link.category].push({
+                name: link.text,
+                href: link.href,
+                category: link.category,
+                servingSize: nutritionFacts["Serving Size"],
+                calories: nutritionFacts["Calories"],
+                totalFat: nutritionFacts["Total Fat"],
+                satFat: nutritionFacts["Sat Fat"],
+                transFat: nutritionFacts["Trans Fat"],
+                cholesterol: nutritionFacts["Cholesterol"],
+                sodium: nutritionFacts["Sodium"],
+                totalCarb: nutritionFacts["Total Carb"],
+                dietaryFiber: nutritionFacts["Dietary Fiber"],
+                sugars: nutritionFacts["Sugars"],
+                protein: nutritionFacts["Protein"]
+              });
+            } else {
+              fullMenu[link.location][link.time][link.category] = [{
+                name: link.text,
+                href: link.href,
+                category: link.category,
+                servingSize: nutritionFacts["Serving Size"],
+                calories: nutritionFacts["Calories"],
+                totalFat: nutritionFacts["Total Fat"],
+                satFat: nutritionFacts["Sat Fat"],
+                transFat: nutritionFacts["Trans Fat"],
+                cholesterol: nutritionFacts["Cholesterol"],
+                sodium: nutritionFacts["Sodium"],
+                totalCarb: nutritionFacts["Total Carb"],
+                dietaryFiber: nutritionFacts["Dietary Fiber"],
+                sugars: nutritionFacts["Sugars"],
+                protein: nutritionFacts["Protein"]
+              }]
+            }
 
             // console.log(`Nutritional facts collected for ${link.location} during ${link.time}:`, nutritionFacts);
             await page.close();
