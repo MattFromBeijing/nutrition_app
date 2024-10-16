@@ -117,7 +117,7 @@ dataRouter.get("/getLocationMenu", async (req, res) => {
 
                 result = await new_menu.aggregate([
                     { $match : {"location" : locationName}}, 
-                    { $project : {"_id" : 0, "Breakfast" : 1}}
+                    { $project : {"_id" : 0, "Breakfast" : 1}},
                 ]).toArray()
                 break
 

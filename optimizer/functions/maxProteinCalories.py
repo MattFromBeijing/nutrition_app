@@ -1,27 +1,30 @@
 import numpy as np
 from scipy.optimize import minimize
 
-def maxProteinCalories(locationMenu, nutReq, init_guess=None):
+def maxProteinCalories(all_dishes, nutReq, init_guess=None):
     """
-    locationMenu: dict with arrays representing location's menu
+    all_dishes: dict with arrays representing location's menu
     nutReq: dict representing user's nutrition requirements, 
     """
+
+    print(nutReq)
     
-    dishes = [item.name for item in locationMenu]
-    calories = [item.calories for item in locationMenu]
-    protein = [item.protein for item in locationMenu]
-    fiber = [item.dietaryFiber for item in locationMenu]
-    fat = [item.totalFat for item in locationMenu]
-    sugar = [item.sugars for item in locationMenu]
-    carbs = [item.totalCarb for item in locationMenu]
+    dishes = [item['name'] for item in all_dishes]
+    calories = [item['calories'] if item['calories'] != 'n/a' else 0 for item in all_dishes]
+    protein = [item['protein'] if item['protein'] != 'n/a' else 0 for item in all_dishes]
+    fiber = [item['dietaryFiber'] if item['dietaryFiber'] != 'n/a' else 0 for item in all_dishes]
+    fat = [item['totalFat'] if item['totalFat'] != 'n/a' else 0 for item in all_dishes]
+    sugar = [item['sugars'] if item['sugars'] != 'n/a' else 0 for item in all_dishes]
+    carbs = [item['totalCarb'] if item['totalCarb'] != 'n/a' else 0 for item in all_dishes]
 
     # Set daily constraints here:
-    min_calories = nutReq.calories
-    max_fat = nutReq.fat
-    max_sugar = nutReq.sugar
-    max_carbs = nutReq.carbs
-    min_protein = nutReq.protein
-    min_fiber = nutReq.fiber
+    min_calories = nutReq[0]
+    min_protein = nutReq[1]
+    max_fat = nutReq[2]
+    max_carbs = nutReq[3]
+    max_sodium = nutReq[4]
+    min_fiber = nutReq[5]
+    max_sugar = nutReq[6]
 
     # Bounds for each dish (x)
     # In this case, it's going to be binary as choosing one dish one time will maintain food diversity
@@ -78,7 +81,9 @@ def maxProteinCalories(locationMenu, nutReq, init_guess=None):
         return macro_minimize + penalties
 
     # Initial guess (equal distribution)
-    x0 = np.zeros(len(dishes))
+    x0 = np.zeros(len(all_dishes))
+    if init_guess is not None:
+        x0 = init_guess
 
     # Minimize fats, sugars, and carbs
     solution1 = minimize(initObjective, x0, bounds=bnds, constraints=constraints, method='SLSQP')
@@ -95,9 +100,10 @@ def maxProteinCalories(locationMenu, nutReq, init_guess=None):
 
     # Final optimized decision variables
     finalSolution = solution2.x
-    selected_dishes = [(i, str(dishes[i]), round(finalSolution[i])) for i in range(len(dishes)) if finalSolution[i] > 0.5]
+    selected_all_dishes = [(dishes[i], all_dishes[i], round(finalSolution[i])) for i in range(len(all_dishes)) if finalSolution[i] > 0.5]
 
-    if init_guess == None:
+    if init_guess is None:
         return finalSolution
     else:
-        return selected_dishes
+        # print(selected_all_dishes)
+        return selected_all_dishes

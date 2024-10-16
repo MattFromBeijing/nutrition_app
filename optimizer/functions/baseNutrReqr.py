@@ -20,13 +20,13 @@ def baseNutrReqr(gender, height, age, weight, act_lvl):
     match act_lvl:
         case "sedentary":
             tdee = bmr * 1.2
-        case "lightly active":
+        case "lightly_active":
             tdee = bmr * 1.375
-        case "moderately active":
+        case "moderately_active":
             tdee = bmr * 1.55
-        case "very active":
+        case "very_active":
             tdee = bmr * 1.725
-        case "super active":
+        case "super_active":
             tdee = bmr * 1.9
     
     calories = tdee # grams per day

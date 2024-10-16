@@ -50,6 +50,8 @@ function MenuPage() {
   const [categories, setCategories] = useState([]);
   const [cart, setCart] = useState({});
   const [cartTotal, setCartTotal] = useState({ calories: 0, protein: 0, totalCarb: 0, totalFat: 0, sugars: 0, dietaryFiber: 0 })
+  const [rec, setRec] = useState([])
+
   const [showExpanded, setShowExpanded] = useState(false);
   const [openedCart, setOpenedCart] = useState(false);
 
@@ -79,7 +81,7 @@ function MenuPage() {
         }
       )
 
-      // console.log(response.data)
+      console.log(response.data)
 
       let menuData = Object.values(response.data)[0]
       let categoriesData = Object.keys(menuData)
@@ -93,6 +95,13 @@ function MenuPage() {
     }
   }
 
+  const fixString = (str) => {
+    // Replace single quotes with double quotes and escape backslashes
+    return str
+      .replace(/'/g, '"')           // Replace single quotes with double quotes
+      .replace(/\\/g, '\\\\');       // Escape backslashes
+  };
+
   const getRecMenu = async () => {
     try {
       let meal = ""
@@ -100,14 +109,25 @@ function MenuPage() {
       else if (time > morning && time <= noon) meal = "Lunch"
       else if (time > noon && time <= evening) meal = "Dinner"
 
+      let testDiet = 'maxProteinCalories'
+      let testUser = ['male', 1.80, 20, 75.0, "moderately_active"]
+
       const response = await axios.get('http://localhost:8000/api/recMenu',
         {
-          params: {locationMenu: JSON.stringify(menu), mealTime: meal}, // not complete, missing dietType and userData
+          params: {
+            locationMenu: JSON.stringify(menu), 
+            dietType: testDiet, 
+            userData: JSON.stringify(testUser), 
+            mealTime: meal,
+          },
           headers: {'Content-Type': 'application/json'},
           withCredentials: true
         }
       )
-      // console.log(response)
+
+      console.log(response.data)
+
+      setRec(response.data)
     } catch (e) {
       setError(e)
       console.error(e)
@@ -120,10 +140,24 @@ function MenuPage() {
     getLocationMenu(location)
   }, [])
 
-  const handleAdd = (index, itemCategory) => {
-    console.log(index)
+  useEffect(() => {
+    if (Object.keys(menu).length > 0) {
+      getRecMenu()
+    }
+  },[menu])
 
-    let itemName = menu[itemCategory][index].name
+  useEffect(() => {
+    calculateTotal()
+  },[cart])
+
+  const handleAdd = (name, index, itemCategory) => {
+    // console.log(index)
+
+    let itemName = name
+    if (name == null) {
+      itemName = menu[itemCategory][index].name
+    }
+    
     // console.log(itemName)
 
     setCart((curr) => {
@@ -203,7 +237,7 @@ function MenuPage() {
           </div>
             <div className='end'>
               <div className='button-area'>
-                <div className='button active' onClick={() => handleAdd(index, item.category)}><p className='icon'>+</p></div>
+                <div className='button active' onClick={() => handleAdd(item.name, index, item.category)}><p className='icon'>+</p></div>
                 {
                   cartCount >= 1 ? 
                   <div className='button active' onClick={() => handleRemove(index, item.category)}><p className='icon'>-</p></div> :
@@ -258,12 +292,34 @@ function MenuPage() {
     // Update the cart total state
     setCartTotal(newTotal);
   };
-  
-  useEffect(() => {
-    calculateTotal()
-  },[cart])
 
-  // getRecMenu()
+  const RecCard = memo(({ key, index, name, itemInfo, count }) => {
+    console.log(itemInfo);
+    return (
+      <div className='item-card'>
+        <div className='content-area'>
+          <div className='title-area'>
+            <p className='name'>{name}</p>
+            <div className='counter-area'>
+              <div className='counter active'><p className='number'>{count}</p></div>
+            </div>
+          </div> 
+          <div className='info-area'>
+            <div className='left'>
+              <p>Calories: {itemInfo.calories}</p>
+              <p>Protein: {itemInfo.protein === "n/a" ? "n/a" : itemInfo.protein + " g"}</p>
+              <p>Carbs: {itemInfo.totalCarb === "n/a" ? "n/a" : itemInfo.totalCarb + " g"}</p>
+            </div>
+            <div className='right'>
+              <p>Fat: {itemInfo.totalFat === "n/a" ? "n/a" : itemInfo.totalFat +" g"}</p>
+              <p>Sugar: {itemInfo.sugars === "n/a" ? "n/a" : itemInfo.sugars + " g"}</p>
+              <p>Fiber: {itemInfo.dietaryFiber === "n/a" ? "n/a" : itemInfo.dietaryFiber + " g"}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  });
 
   return (
     <>
@@ -293,6 +349,43 @@ function MenuPage() {
               <img className='banner' alt="" src={locationImages[link_to_location[location]] || "/penn_state_logo"} />
               <p className='location-name'>{link_to_location[location]}</p>
               <div className='menu-content'>
+
+              <div className='category-section'>
+                <div className='category-title-area'>
+                  <p className='category-title'>
+                    RECOMMENDED
+                  </p>
+                  <div className='add-all-button' 
+                    onClick={() => {
+                      for (let i = 0; i < rec.length; i++) {
+                        let category = rec[i][1].category
+                        let name = rec[i][0]
+                        let index = 0
+                        
+                        handleAdd(name, index, category)
+                      }
+                    }}
+                  >
+                    +
+                  </div>
+                </div>
+                <div className='category-content-area'>
+                  {
+                    rec.map((item, index) => {
+                      console.log(item)
+                      return (
+                        <RecCard 
+                          key={`item-${item[0]}`}
+                          index={index}
+                          name={item[0]}
+                          itemInfo={item[1]}
+                          count={item[2]}
+                        />
+                      )
+                    })
+                  }
+                </div>
+              </div>
               {
                 categories.map((element) => {
                   return (
@@ -314,7 +407,7 @@ function MenuPage() {
                               handleRemove={handleRemove}
                             />
                           ))
-                        }                      
+                        }
                       </div>
                     </div>
                   )
