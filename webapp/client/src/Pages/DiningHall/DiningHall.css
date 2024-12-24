@@ -1,26 +1,26 @@
-.logo {
+.logo-diningHall {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
 
     opacity: 100%;
-    color: white;
+    color: #1c3d5a;
     max-width: fit-content;
     cursor: pointer;
 }
 
-.logo-text {
+.logo-diningHall-text {
     text-align: left;
-    line-height: 3rem;
 }
 
-    .logo-text p.logo-title {
+    .logo-diningHall-text p.logo-title {
         font-size: 4rem;
         margin: 0 0 0 0;
+        line-height: 4rem;
     }
 
-    .logo-text p.logo-subtitle {
+    .logo-diningHall-text p.logo-subtitle {
         font-size: 1.5rem;
         margin: 0 0 0 0;
     }
@@ -31,7 +31,7 @@
     align-items: center;
     padding-bottom: 1rem;
 
-    color: white;
+    color: #1c3d5a;
     text-align: start;
 }
 
@@ -62,7 +62,8 @@ p.title {
     width: 27rem;
     height: 13.5rem;
 
-    border-color: rgb(150, 190, 230);
+    border-color: #001E44;
+    /* border-color: rgb(150, 190, 230); */
     border-style: solid;
 }
 

@@ -163,9 +163,9 @@ function DiningHall() {
         ) : (
           <div className='intro-fade'>
             
-            <div className="logo" onClick={() => navigate('/halls')}>
+            <div className="logo-diningHall" onClick={() => navigate('/halls')}>
               <img alt="" src="/pennState_logo.png" style={{ width: '100px', height: 'auto' }}/>
-              <div className='logo-text'>
+              <div className='logo-diningHall-text'>
                 <p className="logo-title">PennMeal</p>
                 <p className='logo-subtitle'>For growing boys and girls</p>
               </div>

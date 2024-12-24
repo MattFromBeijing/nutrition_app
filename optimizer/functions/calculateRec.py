@@ -55,23 +55,23 @@ def maxProteinCalories(all_dishes, nutReq, init_guess=None):
     def sugarConstraint(x):
         return max_sugar - np.dot(sugar, x)
 
-    def caloricConstraint(x):
-        return np.dot(calories, x) - min_calories
+    # def caloricConstraint(x):
+    #     return np.dot(calories, x) - min_calories
 
-    def proteinConstraint(x):
-        return np.dot(protein, x) - min_protein
+    # def proteinConstraint(x):
+    #     return np.dot(protein, x) - min_protein
 
-    def carbConstraint(x):
-        return max_carbs - np.dot(carbs, x)
+    # def carbConstraint(x):
+    #     return max_carbs - np.dot(carbs, x)
 
     # Combines all of the constraints so it can be passed into the minimize function
     constraints = [
-        {'type': 'ineq', 'fun': caloricConstraint},
-        {'type': 'ineq', 'fun': proteinConstraint},
+        # {'type': 'ineq', 'fun': caloricConstraint},
+        # {'type': 'ineq', 'fun': proteinConstraint},
         {'type': 'ineq', 'fun': fiberConstraint},
         {'type': 'ineq', 'fun': fatConstraint},
         {'type': 'ineq', 'fun': sugarConstraint},
-        {'type': 'ineq', 'fun': carbConstraint}
+        # {'type': 'ineq', 'fun': carbConstraint}
     ]
 
     # Objective Functions

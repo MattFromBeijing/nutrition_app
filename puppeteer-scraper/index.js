@@ -1,6 +1,5 @@
 import { getMenuItems } from "./functions/getMenuItems.js";
 import { getWebPages } from "./functions/getWebPages.js";
-import { getMenu } from './functions/getMenu.js'
 import client from "./db.js"
 
 const scrapeMenus = async () => {

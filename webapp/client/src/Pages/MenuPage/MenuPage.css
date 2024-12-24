@@ -1,26 +1,26 @@
-.logo {
+.logo-menuPage {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
 
     opacity: 100%;
-    color: white;
+    color: #1c3d5a;
     max-width: fit-content;
     cursor: pointer;
 }
 
-.logo-text {
+.logo-menuPage-text {
     text-align: left;
-    line-height: 3rem;
 }
 
-    .logo-text p.logo-title {
+    .logo-menuPage-text p.logo-title {
         font-size: 4rem;
         margin: 0 0 0 0;
+        line-height: 4rem;
     }
 
-    .logo-text p.logo-subtitle {
+    .logo-menuPage-text p.logo-subtitle {
         font-size: 1.5rem;
         margin: 0 0 0 0;
     }
@@ -31,7 +31,7 @@
     align-items: center;
     padding-bottom: 1rem;
 
-    color: white;
+    color: #1c3d5a;
     text-align: start;
 }
 
@@ -40,6 +40,8 @@ img.banner {
     height: 30vh;
     object-fit: cover;
     border-radius: 1.6rem;
+    border-color: #96BEE6;
+    border-style: solid;
     margin: 1rem 0 1rem 0;
 }
 
@@ -62,18 +64,19 @@ p.location-name {
 .category-section {
     display: flex;
     flex-direction: column;
-    justify-content: start;
     flex-wrap: wrap;
     gap: 1rem;
+    justify-content: center;
 }
 
     .category-section .category-title-area {
         flex-basis: 25%;
 
         max-height: 3.5rem;
-        margin: 0.5rem 0 0.5rem 0;
+        margin: 0 0 0 0;
 
         display: flex;
+        justify-content: center;
     }
 
         .category-section .category-title-area .add-all-button {
@@ -81,18 +84,28 @@ p.location-name {
             justify-content: center;
             align-items: center;
 
-            border: 0.2rem solid lightgray;
-            box-shadow: 0rem 0rem 1rem lightgray;
-            height: 1rem;
-            width: 2rem;
+            background-color: white;
+            color: black;
+            box-shadow: 0rem 0rem 1rem grey;
+            border: 0.2rem solid #d3d3d3;
+
+            height: 1.8rem;
+            width: 5rem;
             border-radius: 0.9rem;
+
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .category-section .category-title-area .add-all-button:hover {
+            transform: scale(1.1);
         }
 
         .category-section .category-title-area p.category-title {
             font-size: 1.3rem;
-            line-height: 1.5rem;
-            color: white;
-            margin: 0 0 0 0;
+            color: #1c3d5a;
+            margin: 0 1rem 0 0;
+            text-align: center;
         }
     
     .category-section .category-content-area {
@@ -100,7 +113,7 @@ p.location-name {
 
         display: flex;
         flex-direction: row;
-        justify-self: start;
+        justify-content: center;
         flex-wrap: wrap;
         gap: 1rem;
     }
@@ -473,8 +486,6 @@ p.location-name {
 }
 
     .expanded-shopping-cart .cart-area {
-        /* border-color: black;
-        border-style: solid; */
         background-color: white;
 
         display: flex;

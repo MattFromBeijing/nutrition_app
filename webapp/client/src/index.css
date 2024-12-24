@@ -17,7 +17,8 @@ body {
 
     font-family: "Poppins", sans-serif !important;
     min-height: 100vh;
-    background-color: rgb(30, 64, 124) !important;
+    /* background-color: rgb(30, 64, 124) !important; */
+    background-color: #f0f0f0 !important;
 }
 
 code {

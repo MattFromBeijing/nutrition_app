@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
-from functions.maxProteinCalories import maxProteinCalories
+from functions.calculateRec import maxProteinCalories
 from functions.baseNutrReqr import baseNutrReqr
 import json
 
@@ -46,6 +46,10 @@ def getRecMenu():
 
             case _:
                 return jsonify("diet not found")
-    
-        print(guess)
+            
+            
+        print(f"nutrition_requirements: {nutReqr}")
+        print(f"weight_requirements: {weightNutReqr}")
+        print(f"guess: {guess}")
+        
         return jsonify(guess)

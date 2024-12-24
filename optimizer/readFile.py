@@ -33,8 +33,6 @@ def parse_nutritional_info(data):
         'carbs': np.array(carbs)
     }
 
-
-
 if __name__ == "__main__":
     filename = 'C:/Users/jzhou16/Desktop/Nutrition/Optimization/fullMenu.json'  # Replace with your JSON file path
     data = load_json(filename)

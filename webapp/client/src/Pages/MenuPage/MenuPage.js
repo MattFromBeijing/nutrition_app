@@ -150,12 +150,17 @@ function MenuPage() {
     calculateTotal()
   },[cart])
 
-  const handleAdd = (name, index, itemCategory) => {
+  const handleAdd = (name, index, itemCategory, inputNum) => {
     // console.log(index)
 
     let itemName = name
     if (name == null) {
       itemName = menu[itemCategory][index].name
+    }
+
+    let num = 1
+    if (inputNum != null) {
+      num = inputNum
     }
     
     // console.log(itemName)
@@ -165,12 +170,12 @@ function MenuPage() {
         // console.log(curr[itemName])
         return {
           ...curr,
-          [itemName]: curr[itemName] + 1
+          [itemName]: curr[itemName] + num
         };
       } else {
         return {
           ...curr,
-          [itemName]: 1
+          [itemName]: num
         }
       }
     });
@@ -237,7 +242,7 @@ function MenuPage() {
           </div>
             <div className='end'>
               <div className='button-area'>
-                <div className='button active' onClick={() => handleAdd(item.name, index, item.category)}><p className='icon'>+</p></div>
+                <div className='button active' onClick={() => handleAdd(item.name, index, item.category, 1)}><p className='icon'>+</p></div>
                 {
                   cartCount >= 1 ? 
                   <div className='button active' onClick={() => handleRemove(index, item.category)}><p className='icon'>-</p></div> :
@@ -337,9 +342,9 @@ function MenuPage() {
         ) : (
           <div className="intro-fade">
 
-            <div className="logo" onClick={() => navigate('/halls')}>
+            <div className="logo-menuPage" onClick={() => navigate('/halls')}>
               <img alt="" src="/pennState_logo.png" style={{ width: '100px', height: 'auto' }}/>
-              <div className='logo-text'>
+              <div className='logo-menuPage-text'>
                 <p className="logo-title">PennMeal</p>
                 <p className='logo-subtitle'>For growing boys and girls</p>
               </div>
@@ -352,21 +357,22 @@ function MenuPage() {
 
               <div className='category-section'>
                 <div className='category-title-area'>
-                  <p className='category-title'>
+                  <p className='category-title' style={{ marginRight: "1rem" }}>
                     RECOMMENDED
                   </p>
-                  <div className='add-all-button' 
+                  <div className='add-all-button grow' 
                     onClick={() => {
                       for (let i = 0; i < rec.length; i++) {
                         let category = rec[i][1].category
                         let name = rec[i][0]
                         let index = 0
+                        let num = rec[i][2]
                         
-                        handleAdd(name, index, category)
+                        handleAdd(name, index, category, num)
                       }
                     }}
                   >
-                    +
+                    Add All
                   </div>
                 </div>
                 <div className='category-content-area'>
