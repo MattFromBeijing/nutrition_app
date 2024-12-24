@@ -3,5 +3,5 @@
 local_files
 puppeteer-scraper/node_modules/
 webapp/node_modules/
-webapp/client/node_modules/
+client/node_modules/
 optimizer/venv
