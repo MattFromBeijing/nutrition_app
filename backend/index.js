@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import bcrypt from 'bcrypt';
 import cors from 'cors';
 import dataRouter from './routes/data.js'
 import registerRouter from './routes/registerRouter.js';
@@ -11,7 +10,7 @@ const app = express();
 const port = 5000;
 
 const corsOptions ={
-    origin:'http://localhost:3000', 
+    origin:'http://localhost:3000',
     credentials:true, //access-control-allow-credentials:true
     optionSuccessStatus:200
 }

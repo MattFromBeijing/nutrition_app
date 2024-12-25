@@ -80,7 +80,9 @@ function DiningHall() {
       else if (time > morning && time <= noon) meal = "Lunch"
       else if (time > noon && time <= evening) meal = "Dinner"
 
-      const response = await axios.get('http://localhost:5000/data/getActiveLocations',
+      console.log(`${process.env.WEBAPP_URL}/data/getActiveLocations`)
+
+      const response = await axios.get(`${process.env.WEBAPP_URL}/data/getActiveLocations`,
         {
           params: {locationNames: locationNames, mealType: meal},
           headers: { 'Content-Type': 'application/json' },
@@ -95,21 +97,6 @@ function DiningHall() {
       console.error(err)
     }
   }
-
-  // const getPreviewMenu = async () => {
-  //   try {
-  //     const response = await axios.get('http://localhost:5000/data/getFullMenu',
-  //       {
-  //         headers: { 'Content-Type': 'application/json' },
-  //         withCredentials: true
-  //       }
-  //     )
-      
-  //   } catch (e) {
-  //     setError(e)
-  //     console.error(e)
-  //   }
-  // }
 
   useEffect(() => {
     getActiveLocations();

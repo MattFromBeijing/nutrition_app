@@ -1,5 +1,5 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import client from '../db.js';
 
 
@@ -26,7 +26,7 @@ registerRouter.post('/register', async (req, res) => {
       return res.status(409).send('Username already taken. Please try another one.')
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcryptjs.hash(password, 10)
 
     const newUser = {
       username,

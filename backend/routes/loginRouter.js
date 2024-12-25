@@ -1,5 +1,5 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import client from '../db.js';
 
 const loginRouter = express.Router();
@@ -25,7 +25,7 @@ loginRouter.post( '/login', async (req, res) => {
             return res.status(404).send('Username and/or password are incorrect.')
         }
 
-        const auth = await bcrypt.compare(password, existing.password);
+        const auth = await bcryptjs.compare(password, existing.password);
 
         if(!auth){
             return res.status(404).send('Username and/or password are incorrect.')

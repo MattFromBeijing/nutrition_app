@@ -1,0 +1,4 @@
+webapp/node_modules
+puppeteer-scraper/node_modules
+client/node_modules
+optimizer/venv

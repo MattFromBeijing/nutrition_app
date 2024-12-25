@@ -73,7 +73,9 @@ function MenuPage() {
       else if (time > morning && time <= noon) meal = "Lunch"
       else if (time > noon && time <= evening) meal = "Dinner"
 
-      const response = await axios.get('http://localhost:5000/data/getLocationMenu', 
+      console.log(`${process.env.WEBAPP_URL}/data/getLocationMenu`)
+
+      const response = await axios.get(`${process.env.WEBAPP_URL}/data/getLocationMenu`, 
         {
           params: {locationName: link_to_location[locationName], mealType: meal},
           headers: { 'Content-Type': 'application/json' },
@@ -112,7 +114,9 @@ function MenuPage() {
       let testDiet = 'maxProteinCalories'
       let testUser = ['male', 1.80, 20, 75.0, "moderately_active"]
 
-      const response = await axios.get('http://localhost:8000/api/recMenu',
+      console.log(`${process.env.OPTIMIZER_URL}/api/recMenu`)
+
+      const response = await axios.get(`${process.env.OPTIMIZER_URL}/api/recMenu`,
         {
           params: {
             locationMenu: JSON.stringify(menu), 
