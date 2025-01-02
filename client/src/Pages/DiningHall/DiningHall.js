@@ -62,7 +62,6 @@ function DiningHall() {
 
   const navigate = useNavigate();
   const [activeLocations, setActiveLocations] = useState([])
-  const [previewMenu, setPreviewMenu] = useState([])
 
   const getEasternTime = () => {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
@@ -80,13 +79,14 @@ function DiningHall() {
       else if (time > morning && time <= noon) meal = "Lunch"
       else if (time > noon && time <= evening) meal = "Dinner"
 
-      console.log(`${process.env.WEBAPP_URL}/data/getActiveLocations`)
+      console.log(`${process.env.REACT_APP_BACKEND_URL}/data/getActiveLocations`)
+      console.log(`http://backend:5000/data/getActiveLocations`)
 
-      const response = await axios.get(`${process.env.WEBAPP_URL}/data/getActiveLocations`,
+      const response = await axios.get(`http://localhost:5000/data/getActiveLocations`,
         {
           params: {locationNames: locationNames, mealType: meal},
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true
+          // headers: { 'Content-Type': 'application/json' },
+          withCredentials: false
         }
       )
 

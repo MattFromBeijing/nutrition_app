@@ -28,6 +28,10 @@ dataRouter.get("/getFullMenu", async (req, res) => {
 });
 
 dataRouter.get("/getActiveLocations", async (req, res) => {
+    console.log("Request received on /getActiveLocations");
+    console.log("Request query params:", req.query);
+    console.log("Request received from IP:", req.ip);
+
     try {
         const currentLocations = req.query.locationNames
         const mealType = req.query.mealType

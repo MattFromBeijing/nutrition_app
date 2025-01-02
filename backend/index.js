@@ -9,11 +9,17 @@ import client from './db.js'
 const app = express();
 const port = 5000;
 
+console.log(process.env.CLIENT_URL)
+
 const corsOptions ={
-    origin:'http://localhost:3000',
-    credentials:true, //access-control-allow-credentials:true
+    origin: '*',
+    credentials: false,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     optionSuccessStatus:200
 }
+
+app.options("*", cors(corsOptions)); 
+
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
@@ -24,17 +30,8 @@ app.use('/api', registerRouter)
 app.use('/api', loginRouter);
 
 app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+  console.log(`App listening at http://backend:${port}`);
 });
-
-/*const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.use(express.static(path.join(__dirname, 'client/build')));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build/index.html'));
-});*/
 
 process.on('SIGTERM', () => {
   console.info('MongoDB connection closed!')
