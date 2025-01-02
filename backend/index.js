@@ -12,7 +12,7 @@ const port = 5000;
 console.log(process.env.CLIENT_URL)
 
 const corsOptions ={
-    origin: '*',
+    origin: 'http://localhost:3000',
     credentials: false,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     optionSuccessStatus:200
