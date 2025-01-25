@@ -1,0 +1,55 @@
+services:
+  scraper:
+    build:
+      context: ./scraper
+    container_name: scraper
+    networks:
+      - nutrition_app_network
+    environment:
+      - MONGO_URI=${MGO_URI}
+
+  recommend:
+    build:
+      context: ./recommend
+    container_name: recommend
+    ports:
+      - "8000:8000"
+    networks:
+      - nutrition_app_network
+    environment:
+      - RECOMMEND_URL=http://recommend:8000
+      - FLASK_KEY=${FSK_KEY}
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - "5000:5000"
+    networks:
+      - nutrition_app_network
+    depends_on:
+      - recommend
+    environment:
+      - CLIENT_URL=http://client:3000
+      - MONGO_URI=${MGO_URI}
+
+  client:
+    build:
+      context: ./client
+    container_name: client
+    networks:
+      - nutrition_app_network
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+      - recommend
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:5000
+      - REACT_APP_RECOMMEND_URL=http://recommend:8000
+
+networks:
+  nutrition_app_network:
+    name: nutrition_app_network
+    driver: bridge
