@@ -75,7 +75,7 @@ function MenuPage() {
 
       console.log(`${process.env.REACT_APP_BACKEND_URL}/data/getLocationMenu`)
 
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/data/getLocationMenu`, 
+      const response = await axios.get(`http://localhost:5000/data/getLocationMenu`, 
         {
           params: {locationName: link_to_location[locationName], mealType: meal},
           headers: { 'Content-Type': 'application/json' },
@@ -116,7 +116,7 @@ function MenuPage() {
 
       console.log(`${process.env.REACT_APP_RECOMMEND_URL}/api/recMenu`)
 
-      const response = await axios.get(`${process.env.REACT_APP_RECOMMEND_URL}/api/recMenu`,
+      const response = await axios.get(`http://localhost:8000/api/recMenu`,
         {
           params: {
             locationMenu: JSON.stringify(menu), 
